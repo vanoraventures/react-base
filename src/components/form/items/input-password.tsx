@@ -45,11 +45,9 @@ const InputPassword = (props: InputPasswordProps) => {
     }, []);
 
     const handleChange = (value: string) => {
-        let sameWithValue = context.model.items.find(x => x.name === props.rules?.find(x => x.type === ValidationType.SameWith)?.value)?.value;
-
         if (item) {
             item.value = value;
-            item.isValid = validateFormItem(value, item?.rules, sameWithValue);
+            validateFormItem(item, context.model.items);
 
             context.setModel({...context.model});
         }
@@ -68,6 +66,7 @@ const InputPassword = (props: InputPasswordProps) => {
                 type="password"
                 name={props.name}
                 defaultValue={props.value}
+                placeholder={props.placeholder}
                 onKeyPress={(e) => preventKey(e, props.prevention)}
                 onChange={(e) => { handleChange(e.target.value) }}
                 {...(props.isDisabled ? {disabled: true} : {})}

@@ -56,11 +56,10 @@ const InputDate = (props: InputDateProps) => {
 
     const handleChange = (date: Date) => {
         const value = date.toLocaleString(props.customization?.submitFormat?.locales??"tr-TR", props.customization?.submitFormat?.options??{ year: 'numeric', month: 'numeric', day: 'numeric' });
-        let sameWithValue = context.model.items.find(x => x.name === props.rules?.find(x => x.type === ValidationType.SameWith)?.value)?.value;
 
         if (item) {
             item.value = value;
-            item.isValid = validateFormItem(value, item?.rules, sameWithValue);
+            validateFormItem(item, context.model.items);
 
             context.setModel({...context.model});
         }

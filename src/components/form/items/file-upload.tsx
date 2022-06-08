@@ -44,8 +44,6 @@ const FileUpload = (props: FileUploadProps) => {
     }, []);
 
     const handleChange = (value: string) => {
-        let sameWithValue = context.model.items.find(x => x.name === props.rules?.find(x => x.type === ValidationType.SameWith)?.value)?.value;
-
         if (input && input.current && input.current.files && input.current.files.length > 0) {
             reader.readAsDataURL(input.current.files[0]);
         }
@@ -62,7 +60,7 @@ const FileUpload = (props: FileUploadProps) => {
 
         if (item) {
             item.value = value;
-            item.isValid = validateFormItem(value, item?.rules, sameWithValue);
+            validateFormItem(item, context.model.items);
 
             context.setModel({ ...context.model });
         }

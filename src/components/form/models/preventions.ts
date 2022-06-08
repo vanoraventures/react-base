@@ -2,13 +2,32 @@ import React from "react";
 
 export type Prevention = {
     type: PreventionType,
-    rule?: Function
+    rule?: (event: React.KeyboardEvent) => void
 }
 
 export enum PreventionType {
     OnlyNumber,
     OnlyText,
     Custom
+}
+
+export const Prevent = {
+    OnlyNumber: () : Prevention => {
+        return {
+            type: PreventionType.OnlyNumber
+        }
+    },
+    OnlyText: () : Prevention => {
+        return {
+            type: PreventionType.OnlyNumber
+        }
+    },
+    Custom: (rule: (event: React.KeyboardEvent) => void) : Prevention => {
+        return {
+            type: PreventionType.Custom,
+            rule: rule
+        }
+    }
 }
 
 export const preventKey = (event: React.KeyboardEvent, rule?: Prevention) => {

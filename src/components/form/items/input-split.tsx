@@ -56,12 +56,10 @@ const InputSplit = (props: InputSplitProps) => {
                 inputs.current[newIndex].focus();
             }
         }
-
-        let sameWithValue = context.model.items.find(x => x.name === props.rules?.find(x => x.type === ValidationType.SameWith)?.value)?.value;
-
+        
         if (item) {
             item.value = currentValue;
-            item.isValid = validateFormItem(currentValue, item?.rules, sameWithValue);
+            validateFormItem(item, context.model.items);
 
             context.setModel({...context.model});
         }

@@ -2,10 +2,7 @@ import React from "react";
 import { Story } from "@storybook/react";
 import Noyirmibir from "../main";
 import Form, { FormContext } from ".";
-import InputDate from "./items/input-date";
-import { ValidationType } from './models/validations';
-import InputSplit from "./items/input-split";
-import FileUpload from "./items/file-upload";
+import { Validate } from './models/validations';
 import InputText from "./items/input-text";
 import Checkbox from "./items/checkbox";
 
@@ -24,7 +21,7 @@ const Template: Story = (args) => {
                     return <>
                         {context.model.val("foreign") == "true" &&
                             <InputText name='passport' placeholder='Pasaport No' rules={[
-                                { type: ValidationType.Required, message: "Gereklidir" }, { type: ValidationType.ExactLength, value: 14, message: "Pasaport no 14 haneli olmalıdır." }
+                                Validate.Required("Bu alan gereklidir."), Validate.ExactLength(14, "Pasaport no 14 haneli olmalıdır.")
                             ]}></InputText>
                         }
                     </>

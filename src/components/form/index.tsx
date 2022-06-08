@@ -13,10 +13,12 @@ type FormState = {
     items: FormItem[],
     get: (name: string) => FormItem | undefined,
     val: (name: string) => string,
+    validate: (name: string) => boolean,
+    validateAll: () => boolean,
     isValid: (name: string) => boolean
 }
 
-type FormItem = {
+export type FormItem = {
     name: string,
     value: string,
     rules?: Validation[],
@@ -43,6 +45,22 @@ const Form = (props: FormProps) => {
         val: (name: string): string => {
             return model.items.find(x => x.name === name)?.value??"";
         },
+        validate: (name: string): boolean => {
+            const item = model.items.find(x => x.name === name);
+
+            if (item) {
+                validateFormItem(item, model.items);
+            }
+            
+            return item?.isValid??true;
+        },
+        validateAll: (): boolean => {
+            model.items.forEach(item => {
+                validateFormItem(item, model.items);
+            });
+
+            return model.items.every(x => x.isValid);
+        },
         isValid: (name: string): boolean => {
             return model.items.find(x => x.name === name)?.isValid??false;
         }
@@ -51,11 +69,7 @@ const Form = (props: FormProps) => {
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
 
-        model.items.forEach(item => {
-            item.isValid = validateFormItem(item.value, item.rules);
-        });
-
-        if (model && model.items.every(x => x.isValid)) {
+        if (model && model.validateAll()) {
             let jsonModel: any = {};
 
             model.items.forEach((item, index) => {

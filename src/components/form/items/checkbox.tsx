@@ -42,11 +42,9 @@ const Checkbox = (props: CheckboxProps) => {
     }, []);
 
     const handleChange = (value: any) => {
-        let sameWithValue = context.model.items.find(x => x.name === props.rules?.find(x => x.type === ValidationType.SameWith)?.value)?.value;
-
         if (item) {
             item.value = value;
-            item.isValid = validateFormItem(value, item?.rules, sameWithValue);
+            validateFormItem(item, context.model.items);
 
             context.setModel({...context.model});
         }

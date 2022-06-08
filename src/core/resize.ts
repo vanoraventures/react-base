@@ -1,11 +1,10 @@
-import { useContext } from "react";
-import { NoyirmibirContext } from "../components/main";
+import { useNoyirmibirStore } from "../components/main";
 
 /**
  * Returns an object { width: number | undefined; height: number | undefined; isMobile: boolean; }
  */
 function useWindowSize() {
-    return useContext(NoyirmibirContext).mainState.size;
+    return useNoyirmibirStore(state => state.size);
 }
 
 export default useWindowSize;

@@ -1,4 +1,5 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useEffect } from "react";
+import create from "zustand";
 import "./global.scss";
 
 type MainProps = {
@@ -6,12 +7,25 @@ type MainProps = {
     loadingWrapper?: ReactElement
 }
 
-type NoyirmibirContextType = {
-    mainState: MainState,
-    setMainState: React.Dispatch<React.SetStateAction<MainState>>
+type NoyirmibirStore = {
+    loading: {
+        count: number
+    },
+    scroll: {
+        lastScrollPosition: number,
+        lockedScrollCount: number
+    },
+    size: {
+        width?: number,
+        height?: number,
+        isMobile: boolean
+    },
+    setLoading: (loading: { count: number }) => void,
+    setScroll: (scroll: { lastScrollPosition: number, lockedScrollCount: number }) => void,
+    setSize: (loading: { width?: number, height?: number, isMobile: boolean }) => void
 }
 
-const defaultState: MainState = {
+export const useNoyirmibirStore = create<NoyirmibirStore>(set => ({
     loading: {
         count: 0
     },
@@ -23,45 +37,29 @@ const defaultState: MainState = {
         width: undefined,
         height: undefined,
         isMobile: false
-    }
-}
-
-export type MainState = {
-    loading: {
-        count: number
     },
-    scroll: {
-        lastScrollPosition: number,
-        lockedScrollCount: number
-    },
-    size: {
-        width: number | undefined;
-        height: number | undefined;
-        isMobile: boolean;
-    }
-}
-
-export const NoyirmibirContext = React.createContext<NoyirmibirContextType | null>(null) as React.Context<NoyirmibirContextType>;
+    setLoading: (loading: { count: number }) => set({ loading }),
+    setScroll: (scroll: { lastScrollPosition: number, lockedScrollCount: number }) => set({ scroll }),
+    setSize: (size: { width?: number, height?: number, isMobile: boolean }) => set({ size })
+}));
 
 /**
  * Main wrapper for Noyirmibir React Library
  */
 const Noyirmibir = (props: MainProps) => {
-    const [mainState, setMainState] = useState<MainState>(defaultState);
+    const setSize = useNoyirmibirStore(state => state.setSize);
 
     useEffect(() => {
         let timeout: NodeJS.Timeout;
-        
+
         function handleResize() {
             clearTimeout(timeout);
             timeout = setTimeout(() => {
-                mainState.size = {
+                setSize({
                     width: document.documentElement.clientWidth,
                     height: window.innerHeight,
                     isMobile: document.documentElement.clientWidth <= 900
-                };
-
-                setMainState({...mainState});
+                });
             }, 250);
         }
 
@@ -69,34 +67,28 @@ const Noyirmibir = (props: MainProps) => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    return (
-        <NoyirmibirContext.Provider value={{ mainState, setMainState }}>
-            <>
-                {props.children}
-                {mainState.loading.count > 0 &&
-                    <Loading wrapper={props.loadingWrapper} />
-                }
-            </>
-        </NoyirmibirContext.Provider>
-    );
+    return <>
+        {props.children}
+        <Loading wrapper={props.loadingWrapper} />
+    </>;
 };
 
-type LoadingType = {
-    wrapper?: ReactElement
-}
+const Loading = (props: { wrapper?: ReactElement }) => {
+    const count = useNoyirmibirStore(state => state.loading.count);
 
-const Loading = (props: LoadingType) => {
-    let wrapper = props.wrapper;
+    if (count > 0) {
+        if (props.wrapper) {
+            return props.wrapper
+        }
 
-    if (!wrapper) {
-        wrapper = (<div className="loading">
+        return <div className="loading">
             <svg className="load" x="0px" y="0px" viewBox="0 0 150 150">
                 <circle className="loading-inner" cx="75" cy="75" r="60"></circle>
             </svg>
-        </div>);
+        </div>
     }
 
-    return wrapper;
+    return <></>;
 }
 
 export default Noyirmibir;

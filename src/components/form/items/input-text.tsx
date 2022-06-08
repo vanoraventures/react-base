@@ -46,11 +46,9 @@ const InputText = (props: InputTextProps) => {
     }, []);
 
     const handleChange = (value: string) => {
-        let sameWithValue = context.model.items.find(x => x.name === props.rules?.find(x => x.type === ValidationType.SameWith)?.value)?.value;
-
         if (item) {
             item.value = value;
-            item.isValid = validateFormItem(value, item?.rules, sameWithValue);
+            validateFormItem(item, context.model.items);
 
             context.setModel({...context.model});
         }
@@ -69,6 +67,7 @@ const InputText = (props: InputTextProps) => {
                 <InputMask
                     type="text"
                     name={props.name}
+                    placeholder={props.placeholder}
                     defaultValue={props.value}
                     mask={props.mask}
                     onKeyPress={(e) => preventKey(e, props.prevention)}
