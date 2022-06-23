@@ -1,6 +1,6 @@
 {
   "name": "@noyirmibir/react-base",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Noyirmibir React",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -17,7 +17,7 @@
     "registry": "https://npm.pkg.github.com/noyirmibir"
   },
   "keywords": [],
-  "author": "Sezgi Güneş - Can Üzüm",
+  "author": "Sezgi Güneş",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/noyirmibir/react-base/issues"

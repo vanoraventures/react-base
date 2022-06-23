@@ -60,8 +60,10 @@ const Noyirmibir = (props: MainProps) => {
                     height: window.innerHeight,
                     isMobile: document.documentElement.clientWidth <= 900
                 });
-            }, 250);
-        }
+            }, 350);
+        };
+
+        handleResize();
 
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
