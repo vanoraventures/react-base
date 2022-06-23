@@ -34,9 +34,9 @@ export const useNoyirmibirStore = create<NoyirmibirStore>(set => ({
         lockedScrollCount: 0
     },
     size: {
-        width: undefined,
-        height: undefined,
-        isMobile: false
+        width: document.documentElement.clientWidth,
+        height: window.innerHeight,
+        isMobile: document.documentElement.clientWidth <= 900
     },
     setLoading: (loading: { count: number }) => set({ loading }),
     setScroll: (scroll: { lastScrollPosition: number, lockedScrollCount: number }) => set({ scroll }),
@@ -60,15 +60,13 @@ const Noyirmibir = (props: MainProps) => {
                     height: window.innerHeight,
                     isMobile: document.documentElement.clientWidth <= 900
                 });
-            }, 350);
+            }, 250);
         };
-
-        handleResize();
 
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
-
+    
     return <>
         {props.children}
         <Loading wrapper={props.loadingWrapper} />
