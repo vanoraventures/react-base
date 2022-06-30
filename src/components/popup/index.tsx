@@ -3,14 +3,15 @@ import useLockScroll from "../../core/lockscroll";
 import "./popup.scss";
 
 export type PopupProps = {
-    init?: {
-        open: () => void;
-        close: () => void;
-        init: (openReturn: () => void, closeReturn: () => void) => void;
-    },
+    init?: Popup,
     isOpen?: boolean,
     classNames?: string,
     children: ReactElement[] | ReactElement | string
+}
+
+type Popup = {
+    open: () => void,
+    close: () => void
 }
 
 /**
@@ -30,9 +31,12 @@ const Popup = (props: PopupProps) => {
         setState("closed");
     }
 
-    useEffect(() => {
-        props.init?.init(open, close);
+    if (props.init) {
+        props.init.open = open;
+        props.init.close = close;
+    }
 
+    useEffect(() => {
         if (props.isOpen) {
             open();
         }
@@ -58,17 +62,11 @@ const Popup = (props: PopupProps) => {
 /**
  * Returns an object to give as props to popup component for more control on popup
  */
-export function usePopup(): { open: () => void, close: () => void, init: (openReturn: () => void, closeReturn: () => void) => void } {
-    const result = {
+export function usePopup(): Popup {
+    return {
         open: () => { },
-        close: () => { },
-        init: (openReturn: () => void, closeReturn: () => void) => {
-            result.open = openReturn;
-            result.close = closeReturn;
-        }
-    }
-
-    return result;
+        close: () => { }
+    };
 }
 
 export default Popup;
