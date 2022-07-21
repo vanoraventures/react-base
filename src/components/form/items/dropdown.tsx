@@ -75,7 +75,7 @@ const Dropdown = (props: DropdownProps) => {
                 placeholder={props.placeholder}
                 name={props.name}
                 isSearchable={false}
-                value={props.value !== "" ? props.options?.find(option => option.value === props.value) : null}
+                defaultValue={props.value === "" || props.value === undefined || props.value === null ? null : props.options?.find(option => option.value === props.value)}
                 options={props.options}
                 onChange={(e) => { handleChange(e?.value) }}
                 isDisabled={props.isDisabled ? true : false}
