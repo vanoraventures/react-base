@@ -10,7 +10,7 @@ type RadioProps = {
     rules?: Array<Validation>,
     options: {
         value: string,
-        label: string,
+        label: string | ReactElement | ReactElement[],
         isDisabled?: boolean
     }[],
     classNames?: string,
