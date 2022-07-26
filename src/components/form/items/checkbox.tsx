@@ -7,7 +7,7 @@ type CheckboxProps = {
     name: string,
     value?: string,
     checked?: boolean,
-    label?: string,
+    label?: string | ReactElement | ReactElement[],
     isValid?: boolean,
     rules?: Array<Validation>,
     isDisabled?: boolean,
@@ -27,17 +27,17 @@ const Checkbox = (props: CheckboxProps) => {
 
         context.model.items.push({
             name: props.name,
-            value: props.checked ? props.value??"" : "",
+            value: props.checked ? props.value ?? "" : "",
             rules: props.rules,
             isValid: (props.rules ? props.isValid : true)
         });
 
-        context.setModel({...context.model});
+        context.setModel({ ...context.model });
 
         return () => {
             context.model.items = context.model.items.filter(x => x.name !== props.name);
 
-            context.setModel({...context.model});
+            context.setModel({ ...context.model });
         }
     }, []);
 
@@ -46,7 +46,7 @@ const Checkbox = (props: CheckboxProps) => {
             item.value = value;
             validateFormItem(item, context.model.items);
 
-            context.setModel({...context.model});
+            context.setModel({ ...context.model });
         }
 
         if (props.changeFunction) {
@@ -55,7 +55,7 @@ const Checkbox = (props: CheckboxProps) => {
     }
 
     return (
-        <div className={"form-item" + ((item?.value??"".toString()).length > 0 ? " filled" : "") + (item?.isValid === false ? " error" : "") + (props.classNames ? " " + props.classNames : "")}>
+        <div className={"form-item" + ((item?.value ?? "".toString()).length > 0 ? " filled" : "") + (item?.isValid === false ? " error" : "") + (props.classNames ? " " + props.classNames : "")}>
             <input
                 type="checkbox"
                 id={props.name}
@@ -66,6 +66,7 @@ const Checkbox = (props: CheckboxProps) => {
                 {...(props.isDisabled ? { disabled: true } : {})}
             />
             <label htmlFor={props.name}>{props.label}</label>
+            {props.children}
             <ErrorMessage rules={item?.rules} />
         </div>
     )
