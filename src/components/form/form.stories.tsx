@@ -15,7 +15,7 @@ const Template: Story = (args) => {
     return <Noyirmibir>
         <Form submitFunction={(model: any) => console.log(model)}>
             {/* <InputText name='fullname' rules={[{ type: ValidationType.Required, message: "Bu alan gereklidir." }]}></InputText> */}
-            <Checkbox name='foreign' label='Yabancı' value='true'></Checkbox>
+            {/* <Checkbox name='foreign' label='Yabancı' value='true'></Checkbox> */}
             <FormContext.Consumer>
                 {context => {
                     return <>
@@ -24,10 +24,17 @@ const Template: Story = (args) => {
                                 Validate.Required("Bu alan gereklidir."), Validate.ExactLength(14, "Pasaport no 14 haneli olmalıdır.")
                             ]}></InputText>
                         }
+                        <Checkbox
+                            label={"Test"}
+                            name="isExemptFromEnglishLesson"
+                            value="true"
+                            // isDisabled={lock.personalInfo}
+                            checked={true}
+                        />
                     </>
                 }}
             </FormContext.Consumer>
-            <button>Gönder</button>
+            <button>AAA</button>
         </Form>
     </Noyirmibir>
 };

@@ -55,14 +55,13 @@ const Checkbox = (props: CheckboxProps) => {
     }
 
     return (
-        <div className={"form-item" + ((item?.value ?? "".toString()).length > 0 ? " filled" : "") + (item?.isValid === false ? " error" : "") + (props.classNames ? " " + props.classNames : "")}>
+        <div className={"form-item" + (item?.value == props.value ? " filled" : "") + (item?.isValid === false ? " error" : "") + (props.classNames ? " " + props.classNames : "")}>
             <input
                 type="checkbox"
                 id={props.name}
                 name={props.name}
-                defaultValue={props.value}
-                defaultChecked={props.checked}
-                onChange={(e) => { handleChange(e.target.checked ? e.target.value : "") }}
+                defaultChecked={item?.value == props.value}
+                onChange={(e) => { handleChange(e.target.checked ? props.value : "") }}
                 {...(props.isDisabled ? { disabled: true } : {})}
             />
             <label htmlFor={props.name}>{props.label}</label>
