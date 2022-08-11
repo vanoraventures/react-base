@@ -61,8 +61,8 @@ const Checkbox = (props: CheckboxProps) => {
                 id={props.name}
                 name={props.name}
                 defaultValue={props.value}
+                defaultChecked={props.checked}
                 onChange={(e) => { handleChange(e.target.checked ? e.target.value : "") }}
-                checked={props.checked}
                 {...(props.isDisabled ? { disabled: true } : {})}
             />
             <label htmlFor={props.name}>{props.label}</label>
