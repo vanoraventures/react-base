@@ -5,6 +5,8 @@ import Form, { FormContext } from ".";
 import { Validate } from './models/validations';
 import InputText from "./items/input-text";
 import Checkbox from "./items/checkbox";
+import Dropdown from "./items/dropdown";
+import RangeSliderInput from "./items/range";
 
 export default {
     title: "noyirmibir-react/form",
@@ -31,10 +33,23 @@ const Template: Story = (args) => {
                             // isDisabled={lock.personalInfo}
                             checked={true}
                         />
+                       
+                        <Dropdown
+                            name="demo"
+                            placeholder={"Lütfen Seçiniz"}
+                            options={[{
+                                label: "asd",
+                                value: "1"
+                            }]} />
+                        <button onClick={() => {
+                            const item = context.model.get("demo")
+                            if (item) {
+                                item.value = ""
+                            }
+                        }}>AAA</button>
                     </>
                 }}
             </FormContext.Consumer>
-            <button>AAA</button>
         </Form>
     </Noyirmibir>
 };

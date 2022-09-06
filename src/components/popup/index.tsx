@@ -6,7 +6,9 @@ export type PopupProps = {
     init?: Popup,
     isOpen?: boolean,
     classNames?: string,
-    children: ReactElement[] | ReactElement | string
+    children: ReactElement[] | ReactElement | string,
+    onOpen?: Function,
+    onClose?: Function
 }
 
 type Popup = {
@@ -24,11 +26,17 @@ const Popup = (props: PopupProps) => {
     const open = () => {
         lockScroll();
         setState("opened");
+        if(props.onOpen) {
+            props.onOpen();
+        }
     }
 
     const close = () => {
         unlockScroll();
         setState("closed");
+        if(props.onClose) {
+            props.onClose();
+        }
     }
 
     if (props.init) {

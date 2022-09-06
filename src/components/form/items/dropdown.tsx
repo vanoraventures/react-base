@@ -14,7 +14,7 @@ type DropdownProps = {
     isDisabled?: boolean,
     rules?: Array<Validation>,
     options: {
-        value: string,
+        value: string | React.ReactElement | React.ReactElement[],
         label: string
     }[],
     classNames?: string,
@@ -34,17 +34,17 @@ const Dropdown = (props: DropdownProps) => {
 
         context.model.items.push({
             name: props.name,
-            value: props.value??"",
+            value: props.value ?? "",
             rules: props.rules,
             isValid: (props.rules ? props.isValid : true)
         });
 
-        context.setModel({...context.model});
+        context.setModel({ ...context.model });
 
         return () => {
             context.model.items = context.model.items.filter(x => x.name !== props.name);
 
-            context.setModel({...context.model});
+            context.setModel({ ...context.model });
         }
     }, []);
 
@@ -53,7 +53,7 @@ const Dropdown = (props: DropdownProps) => {
             item.value = value;
             validateFormItem(item, context.model.items);
 
-            context.setModel({...context.model});
+            context.setModel({ ...context.model });
         }
 
         if (props.changeFunction) {
@@ -62,7 +62,7 @@ const Dropdown = (props: DropdownProps) => {
     }
 
     return (
-        <div className={"form-item" + ((item?.value??"".toString()).length > 0 ? " filled" : "") + (item?.isValid === false ? " error" : "") + (props.classNames ? " " + props.classNames : "")}
+        <div className={"form-item" + ((item?.value ?? "".toString()).length > 0 ? " filled" : "") + (item?.isValid === false ? " error" : "") + (props.classNames ? " " + props.classNames : "")}
             onFocusCapture={() => { setActive(true) }}
             onBlurCapture={() => { setActive(false) }}
         >

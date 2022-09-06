@@ -60,7 +60,7 @@ const Checkbox = (props: CheckboxProps) => {
                 type="checkbox"
                 id={props.name}
                 name={props.name}
-                defaultChecked={item?.value == props.value}
+                defaultChecked={props.checked}
                 onChange={(e) => { handleChange(e.target.checked ? props.value : "") }}
                 {...(props.isDisabled ? { disabled: true } : {})}
             />
