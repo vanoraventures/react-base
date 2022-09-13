@@ -23,10 +23,9 @@ type RangeSliderProps = {
     children?: ReactElement
 }
 
-const RangeSliderInput = (props: RangeSliderProps) => {
+const RangeSlider = (props: RangeSliderProps) => {
     const context = useContext(FormContext);
     const item = context.model.items.find(x => x.name === props.name);
-    const [value, setValue] = useState<Range | number>(props.values)
 
     useEffect(() => {
         if (context.model.items.some(x => x.name === props.name)) {
@@ -35,7 +34,7 @@ const RangeSliderInput = (props: RangeSliderProps) => {
 
         context.model.items.push({
             name: props.name,
-            value: value ? JSON.stringify(value) : "",
+            value: props.values ? JSON.stringify(props.values) : "",
             rules: props.rules,
             isValid: (props.rules ? props.isValid : true)
         });
@@ -71,15 +70,13 @@ const RangeSliderInput = (props: RangeSliderProps) => {
                 maxValue={props.max}
                 minValue={props.min}
                 formatLabel={(e) => props.formatLabel ? `${e} ${props.formatLabel}` : ''}
-                value={value}
-                onChange={(e: any) => {
-                    handleChange(e)
-                    setValue(e)
+                value={(typeof props.values == "string" ? item?.value??0 * 1 : JSON.parse(item?.value??'{"min": 0, "max": 0}'))}
+                onChange={(val: number | Range) => {
+                    handleChange(typeof val == "number" ? val.toString() : JSON.stringify(val))
                 }}
             />
-            <input type="hidden" name={props.name} defaultValue={typeof (value) == "object" ? JSON.stringify(value) : value} />
         </div>
     )
 }
 
-export default RangeSliderInput;
+export default RangeSlider;
