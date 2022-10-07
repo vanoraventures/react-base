@@ -24,7 +24,7 @@ function useLockScroll(): [Function, Function] {
 
     const unlockScroll = () => {
         const count = scroll.lockedScrollCount;
-        scroll.lockedScrollCount = count - 1;
+        scroll.lockedScrollCount = Math.max(count - 1, 0);
 
         if (count === 1) {
             document.documentElement.classList.remove("lock");
