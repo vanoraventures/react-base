@@ -1,31 +1,20 @@
-import React, { ReactElement, useContext, useState } from "react";
+import React, { MouseEventHandler, ReactElement, useContext, useEffect, useState } from "react";
 import "./tabs.scss";
 
-type TabsProps = {
+type Props = {
     classNames?: string,
+    children: ReactElement[] | ReactElement | string,
+    onClick?: MouseEventHandler<HTMLElement>,
+    onMouseDown?: MouseEventHandler<HTMLElement>,
+    onMouseUp?: MouseEventHandler<HTMLElement>,
+    onMouseMove?: MouseEventHandler<HTMLElement>,
+    onMouseEnter?: MouseEventHandler<HTMLElement>,
+    onMouseLeave?: MouseEventHandler<HTMLElement>
+}
+
+type TabsProps = Props & {
     startIndex?: number,
-    children: ReactElement[]
-}
-
-type TabMenuProps = {
-    classNames?: string,
-    children: ReactElement[]
-}
-
-type TabMenuItemProps = {
-    classNames?: string,
-    title?: string,
-    children: ReactElement[] | ReactElement | string
-}
-
-type TabContainerProps = {
-    classNames?: string,
-    children: ReactElement[]
-}
-
-type TabItemProps = {
-    classNames?: string,
-    children: ReactElement[] | ReactElement | string
+    onChange?: (index: number) => void
 }
 
 type TabContextType = {
@@ -41,9 +30,22 @@ const TabContext = React.createContext<TabContextType | null>(null) as React.Con
 const Tabs = (props: TabsProps) => {
     const [index, setIndex] = useState(props.startIndex ? props.startIndex : 0);
 
+    useEffect(() => {
+        if (props.onChange) {
+            props.onChange(index);
+        }
+    }, [index]);
+
     return (
         <TabContext.Provider value={{ index, setIndex }}>
-            <div className={"tabs" + (props.classNames ? " " + props.classNames : "")}>
+            <div
+                className={"tabs" + (props.classNames ? " " + props.classNames : "")}
+                onClick={props.onClick}
+                onMouseDown={props.onMouseDown}
+                onMouseUp={props.onMouseUp}
+                onMouseMove={props.onMouseMove}
+                onMouseEnter={props.onMouseEnter}
+                onMouseLeave={props.onMouseLeave}>
                 {props.children}
             </div>
         </TabContext.Provider>
@@ -53,11 +55,18 @@ const Tabs = (props: TabsProps) => {
 /**
  * Must have TabMenuItem components
  */
-export const TabMenu = (props: TabMenuProps) => {
+export const TabMenu = (props: Props & { children: ReactElement[] }) => {
     return (
-        <div className={"tab-menu" + (props.classNames ? " " + props.classNames : "")}>
+        <div
+            className={"tab-menu" + (props.classNames ? " " + props.classNames : "")}
+            onClick={props.onClick}
+            onMouseDown={props.onMouseDown}
+            onMouseUp={props.onMouseUp}
+            onMouseMove={props.onMouseMove}
+            onMouseEnter={props.onMouseEnter}
+            onMouseLeave={props.onMouseLeave}>
             {props.children.map((item, index) => {
-                return TabMenuItem(item.props, index);
+                return <TabMenuItem key={"tab-menu-item-" + index} {...item.props} index={index}></TabMenuItem>
             })}
         </div>
     );
@@ -66,28 +75,46 @@ export const TabMenu = (props: TabMenuProps) => {
 /**
  * TabMenuItem can have any children
  */
-export const TabMenuItem = (props: TabMenuItemProps, itemIndex: number) => {
+export const TabMenuItem = (props: Props & { index?: number }) => {
     const context = useContext(TabContext);
-    
-    const click = () => {
-        context.setIndex(itemIndex);
+
+    const click = (event: any) => {
+        context.setIndex(props.index??0);
+
+        if (props.onClick) {
+            props.onClick(event);
+        }
     }
 
     return (
-        <a href="javascript:void(0)" title={props.title} onClick={click} className={"tab-menu-item" + (props.classNames ? " " + props.classNames : "") + (context.index === itemIndex ? " active" : "")}>
+        <div
+            className={"tab-menu-item" + (props.classNames ? " " + props.classNames : "") + (context.index === props.index ? " active" : "")}
+            onClick={click}
+            onMouseDown={props.onMouseDown}
+            onMouseUp={props.onMouseUp}
+            onMouseMove={props.onMouseMove}
+            onMouseEnter={props.onMouseEnter}
+            onMouseLeave={props.onMouseLeave}>
             {props.children}
-        </a>
+        </div>
     );
 };
 
 /**
  * Must have TabItem components
  */
-export const TabContainer = (props: TabContainerProps) => {
+export const TabContainer = (props: Props & { children: ReactElement[] }) => {
     const context = useContext(TabContext);
 
     return (
-        <div className={"tab-container" + (props.classNames ? " " + props.classNames : "")}>
+        <div
+            className={"tab-container" + (props.classNames ? " " + props.classNames : "")}
+            onClick={props.onClick}
+            onMouseDown={props.onMouseDown}
+            onMouseUp={props.onMouseUp}
+            onMouseMove={props.onMouseMove}
+            onMouseEnter={props.onMouseEnter}
+            onMouseLeave={props.onMouseLeave}>
             {props.children.map((item, index) => {
                 if (index === context.index && item.type === TabItem) {
                     return item;
@@ -100,9 +127,16 @@ export const TabContainer = (props: TabContainerProps) => {
 /**
  * TabItem can have any children
  */
-export const TabItem = (props: TabItemProps) => {
+export const TabItem = (props: Props) => {
     return (
-        <div className={"tab-item" + (props.classNames ? " " + props.classNames : "")}>
+        <div
+            className={"tab-item" + (props.classNames ? " " + props.classNames : "")}
+            onClick={props.onClick}
+            onMouseDown={props.onMouseDown}
+            onMouseUp={props.onMouseUp}
+            onMouseMove={props.onMouseMove}
+            onMouseEnter={props.onMouseEnter}
+            onMouseLeave={props.onMouseLeave}>
             {props.children}
         </div>
     );

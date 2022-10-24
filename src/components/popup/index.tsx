@@ -3,12 +3,12 @@ import useLockScroll from "../../core/lockscroll";
 import "./popup.scss";
 
 export type PopupProps = {
-    init?: Popup,
+    popup?: Popup,
     isOpen?: boolean,
     classNames?: string,
     children: ReactElement[] | ReactElement | string,
-    onOpen?: Function,
-    onClose?: Function
+    onOpen?: () => void,
+    onClose?: () => void
 }
 
 type Popup = {
@@ -26,7 +26,8 @@ const Popup = (props: PopupProps) => {
     const open = () => {
         lockScroll();
         setState("opened");
-        if(props.onOpen) {
+
+        if (props.onOpen) {
             props.onOpen();
         }
     }
@@ -34,14 +35,15 @@ const Popup = (props: PopupProps) => {
     const close = () => {
         unlockScroll();
         setState("closed");
-        if(props.onClose) {
+
+        if (props.onClose) {
             props.onClose();
         }
     }
 
-    if (props.init) {
-        props.init.open = open;
-        props.init.close = close;
+    if (props.popup) {
+        props.popup.open = open;
+        props.popup.close = close;
     }
 
     useEffect(() => {

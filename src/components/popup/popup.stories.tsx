@@ -14,7 +14,7 @@ const Template: Story<PopupProps> = (args: PopupProps) => {
     return <Noyirmibir>
         <>
             <button onClick={() => popup.open()}>Open</button>
-            <Popup init={popup}>
+            <Popup popup={popup} onOpen={() => { console.log("opened") }} onClose={() => { console.log("closed") }}>
                 <div className="popup-container">
                     <div className="content">
                         Test

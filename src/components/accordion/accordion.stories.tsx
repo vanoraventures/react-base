@@ -12,12 +12,20 @@ export default {
 const Template: Story = (args) =>
     <Noyirmibir>
         <Accordion {...args}>
-            <AccordionItem>
+        <AccordionItem onOpen={() => { console.log("open") }} onClose={() => { console.log("close") }}>
                 <AccordionHeader>
                     Header
                 </AccordionHeader>
                 <AccordionBody>
                     Body
+                </AccordionBody>
+            </AccordionItem>
+            <AccordionItem>
+                <AccordionHeader>
+                    Header1
+                </AccordionHeader>
+                <AccordionBody>
+                    Body1
                 </AccordionBody>
             </AccordionItem>
         </Accordion>

@@ -1,63 +1,59 @@
 import Select from 'react-select'
 import ErrorMessage from "./errorMessage";
-import { ReactElement, useContext, useEffect, useState } from "react";
+import { KeyboardEventHandler, ReactElement, useContext, useEffect, useState } from "react";
 import React from 'react';
-import { validateFormItem, Validation, ValidationType } from '../models/validations';
-import { FormContext } from '..';
+import { validateFormItem } from '../models/validations';
+import { FormContext, FormItemProps } from '..';
 
-type DropdownProps = {
-    name: string,
-    value?: string,
+type DropdownProps = FormItemProps & {
     label?: string,
     placeholder?: string | ReactElement,
-    isValid?: boolean,
     isDisabled?: boolean,
-    rules?: Array<Validation>,
     options: {
         value: string | React.ReactElement | React.ReactElement[],
         label: string
     }[],
-    classNames?: string,
-    changeFunction?: Function,
-    children?: ReactElement
+    onKeyDown: KeyboardEventHandler<HTMLElement>,
+    onMenuOpen: () => void,
+    onMenuClose: () => void
 }
 
 const Dropdown = (props: DropdownProps) => {
     const context = useContext(FormContext);
-    const item = context.model.items.find(x => x.name === props.name);
+    const item = context.model.find(x => x.name === props.name);
     const [isActive, setActive] = useState(false);
 
     useEffect(() => {
-        if (context.model.items.some(x => x.name === props.name)) {
+        if (context.model.some(x => x.name === props.name)) {
             throw new Error("Development error ---> Each form element must have unique name!");
         }
 
-        context.model.items.push({
+        context.model.push({
             name: props.name,
             value: props.value ?? "",
             rules: props.rules,
             isValid: (props.rules ? props.isValid : true)
         });
 
-        context.setModel({ ...context.model });
+        context.setModel([...context.model]);
 
         return () => {
-            context.model.items = context.model.items.filter(x => x.name !== props.name);
+            context.model = context.model.filter(x => x.name !== props.name);
 
-            context.setModel({ ...context.model });
+            context.setModel([...context.model]);
         }
     }, []);
 
     const handleChange = (value: any) => {
         if (item) {
             item.value = value;
-            validateFormItem(item, context.model.items);
+            validateFormItem(item, context.model);
 
-            context.setModel({ ...context.model });
+            context.setModel([...context.model]);
         }
 
-        if (props.changeFunction) {
-            props.changeFunction(value);
+        if (props.onChange) {
+            props.onChange(value);
         }
     }
 
@@ -75,9 +71,14 @@ const Dropdown = (props: DropdownProps) => {
                 placeholder={props.placeholder}
                 name={props.name}
                 isSearchable={false}
-                defaultValue={props.value === "" || props.value === undefined || props.value === null ? null : props.options?.find(option => option.value === props.value)}
+                value={item?.value === "" || item?.value === undefined || item?.value === null ? null : props.options?.find(option => option.value === item?.value)}
                 options={props.options}
                 onChange={(e) => { handleChange(e?.value) }}
+                onFocus={props.onFocus}
+                onBlur={props.onBlur}
+                onKeyDown={props.onKeyDown}
+                onMenuOpen={props.onMenuOpen}
+                onMenuClose={props.onMenuClose}
                 isDisabled={props.isDisabled ? true : false}
             />
             {props.children}

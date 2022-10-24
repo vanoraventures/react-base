@@ -10,20 +10,20 @@ export default {
 
 const Template: Story = (args) =>
     <Noyirmibir>
-        <Tabs {...args}>
-            <TabMenu>
-                <TabMenuItem>
+        <Tabs {...args} onChange={(index) => { console.log("current-index: " + index) }}>
+            <TabMenu onClick={() => { console.log("tab-menu click") }}>
+                <TabMenuItem key={"tab-menu-1"} onClick={() => { console.log("tab-menu-item-1 click") }}>
                     Tab 1
                 </TabMenuItem>
-                <TabMenuItem>
+                <TabMenuItem key={"tab-menu-2"}>
                     Tab 2
                 </TabMenuItem>
             </TabMenu>
             <TabContainer>
-                <TabItem>
+                <TabItem key={"tab-item-1"}>
                     Tab Item 1
                 </TabItem>
-                <TabItem>
+                <TabItem key={"tab-item-2"}>
                     Tab Item 2
                 </TabItem>
             </TabContainer>

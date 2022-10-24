@@ -2,7 +2,7 @@ import React from "react";
 import { Validation } from "../models/validations";
 
 type ErrorMessageProps = {
-    rules?: Array<Validation>
+    rules?: Validation[]
 }
 
 const ErrorMessage = (props :ErrorMessageProps) => {

@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { MouseEventHandler, ReactElement } from "react";
 import useWindowSize from "../../core/resize";
 import "./background.scss";
 
@@ -7,7 +7,13 @@ export type BackgroundProps = {
     mobile?: string,
     isSection?: boolean,
     classNames?: string,
-    children?: ReactElement[] | ReactElement | string
+    children?: ReactElement[] | ReactElement | string,
+    onClick?: MouseEventHandler<HTMLElement>,
+    onMouseDown?: MouseEventHandler<HTMLElement>,
+    onMouseUp?: MouseEventHandler<HTMLElement>,
+    onMouseMove?: MouseEventHandler<HTMLElement>,
+    onMouseEnter?: MouseEventHandler<HTMLElement>,
+    onMouseLeave?: MouseEventHandler<HTMLElement>
 }
 
 /**
@@ -19,11 +25,27 @@ const Background = (props: BackgroundProps) => {
     return (
         <>
             {props.isSection ?
-                <section {...(props.classNames ? {"className": props.classNames} : {})} style={{backgroundImage: "url(" + (size.isMobile && props.mobile ? props.mobile : props.desktop) + ")"}}>
+                <section
+                    {...(props.classNames ? { "className": props.classNames } : {})}
+                    style={{ backgroundImage: "url(" + (size.isMobile && props.mobile ? props.mobile : props.desktop) + ")" }}
+                    onClick={props.onClick}
+                    onMouseDown={props.onMouseDown}
+                    onMouseUp={props.onMouseUp}
+                    onMouseMove={props.onMouseMove}
+                    onMouseEnter={props.onMouseEnter}
+                    onMouseLeave={props.onMouseLeave}>
                     {props.children}
                 </section>
                 :
-                <div {...(props.classNames ? {"className": props.classNames} : {})} style={{backgroundImage: "url(" + (size.isMobile && props.mobile ? props.mobile : props.desktop) + ")"}}>
+                <div
+                    {...(props.classNames ? { "className": props.classNames } : {})}
+                    style={{ backgroundImage: "url(" + (size.isMobile && props.mobile ? props.mobile : props.desktop) + ")" }}
+                    onClick={props.onClick}
+                    onMouseDown={props.onMouseDown}
+                    onMouseUp={props.onMouseUp}
+                    onMouseMove={props.onMouseMove}
+                    onMouseEnter={props.onMouseEnter}
+                    onMouseLeave={props.onMouseLeave}>
                     {props.children}
                 </div>
             }

@@ -1,32 +1,25 @@
-import React, { ReactElement, useContext, useEffect, useRef, useState } from "react";
-import { FormContext } from "..";
-import { validateFormItem, Validation, ValidationType } from "../models/validations";
+import React, { useContext, useEffect, useRef } from "react";
+import { FormContext, FormItemProps, FormKeyEvents, FormMouseEvents } from "..";
+import { validateFormItem } from "../models/validations";
 import ErrorMessage from './errorMessage';
 
-type FileUploadProps = {
-    name: string,
-    value?: string,
+type FileUploadProps = FormItemProps & FormKeyEvents & FormMouseEvents & {
     isDisabled?: boolean,
-    label?: string,
-    isValid?: boolean,
-    rules?: Array<Validation>,
-    classNames?: string,
-    changeFunction?: Function,
-    children?: ReactElement
+    label?: string
 }
 
 const FileUpload = (props: FileUploadProps) => {
     const context = useContext(FormContext);
-    const item = context.model.items.find(x => x.name === props.name);
+    const item = context.model.find(x => x.name === props.name);
     const input = useRef<HTMLInputElement>(null);
     const reader = new FileReader();
 
     useEffect(() => {
-        if (context.model.items.some(x => x.name === props.name)) {
+        if (context.model.some(x => x.name === props.name)) {
             throw new Error("Development error ---> Each form element must have unique name!");
         }
 
-        context.model.items.push({
+        context.model.push({
             name: props.name,
             value: props.value ?? "",
             rules: props.rules,
@@ -34,12 +27,12 @@ const FileUpload = (props: FileUploadProps) => {
             data: ""
         });
 
-        context.setModel({ ...context.model });
+        context.setModel([...context.model]);
 
         return () => {
-            context.model.items = context.model.items.filter(x => x.name !== props.name);
+            context.model = context.model.filter(x => x.name !== props.name);
 
-            context.setModel({ ...context.model });
+            context.setModel([...context.model]);
         }
     }, []);
 
@@ -53,27 +46,27 @@ const FileUpload = (props: FileUploadProps) => {
 
                 if (item) {
                     item.data = "";
-                    context.setModel({ ...context.model });
+                    context.setModel([...context.model]);
                 }
             }
         }
 
         if (item) {
             item.value = value;
-            validateFormItem(item, context.model.items);
+            validateFormItem(item, context.model);
 
-            context.setModel({ ...context.model });
+            context.setModel([...context.model]);
         }
 
-        if (props.changeFunction) {
-            props.changeFunction(value);
+        if (props.onChange) {
+            props.onChange(value);
         }
     }
 
     reader.addEventListener("load", function () {
         if (item) {
             item.data = reader.result as string;
-            context.setModel({ ...context.model });
+            context.setModel([...context.model]);
         }
     }, false);
 
@@ -83,13 +76,13 @@ const FileUpload = (props: FileUploadProps) => {
 
     // let btnRemoveClick = (e: React.MouseEvent) => {
     //     if (input && input.current) {
-    //         const item = context.model.items.find(x => x.name === props.name);
+    //         const item = context.model.find(x => x.name === props.name);
 
     //         input.current.value = "";
 
     //         if (item) {
     //             item.data = "";
-    //             context.setModel({ ...context.model });
+    //             context.setModel([...context.model]);
     //         }
     //     }
     // }
@@ -105,6 +98,17 @@ const FileUpload = (props: FileUploadProps) => {
                 name={props.name}
                 defaultValue={props.value}
                 onChange={(e) => handleChange(e.currentTarget.value)}
+                onKeyPress={props.onKeyPress}
+                onKeyDown={props.onKeyDown}
+                onKeyUp={props.onKeyUp}
+                onFocus={props.onFocus}
+                onBlur={props.onBlur}
+                onClick={props.onClick}
+                onMouseDown={props.onMouseDown}
+                onMouseUp={props.onMouseUp}
+                onMouseMove={props.onMouseMove}
+                onMouseEnter={props.onMouseEnter}
+                onMouseLeave={props.onMouseLeave}
                 {...(props.isDisabled ? { disabled: true } : {})}
             />
             {props.children}

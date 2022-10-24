@@ -1,20 +1,13 @@
 import ErrorMessage from './errorMessage';
 import NumberFormat from 'react-number-format';
-import React, { ReactElement, useContext, useEffect } from 'react';
-import { validateFormItem, Validation, ValidationType } from '../models/validations';
-import { FormContext } from '..';
+import React, { useContext, useEffect } from 'react';
+import { validateFormItem } from '../models/validations';
+import { FormContext, FormItemProps, FormKeyEvents, FormMouseEvents } from '..';
 
-type InputNumberProps = {
-    name: string,
-    value?: string,
+type InputNumberProps = FormItemProps & FormKeyEvents & FormMouseEvents & {
     isDisabled?: boolean,
     label?: string,
     placeholder?: string,
-    isValid?: boolean,
-    rules?: Array<Validation>,
-    classNames?: string,
-    changeFunction?: Function,
-    children?: ReactElement,
     customization?: {
         thousandSeparator?: string,
         decimalSeparator?: string,
@@ -27,50 +20,50 @@ type InputNumberProps = {
 
 const InputNumber = (props: InputNumberProps) => {
     const context = useContext(FormContext);
-    const item = context.model.items.find(x => x.name === props.name);
+    const item = context.model.find(x => x.name === props.name);
 
     useEffect(() => {
-        if (context.model.items.some(x => x.name === props.name)) {
+        if (context.model.some(x => x.name === props.name)) {
             throw new Error("Development error ---> Each form element must have unique name!");
         }
 
-        context.model.items.push({
+        context.model.push({
             name: props.name,
-            value: props.value??"",
+            value: props.value ?? "",
             rules: props.rules,
             isValid: (props.rules ? props.isValid : true)
         });
 
-        context.setModel({...context.model});
+        context.setModel([...context.model]);
 
         return () => {
-            context.model.items = context.model.items.filter(x => x.name !== props.name);
+            context.model = context.model.filter(x => x.name !== props.name);
 
-            context.setModel({...context.model});
+            context.setModel([...context.model]);
         }
     }, []);
 
     const handleChange = (value: string) => {
         if (item) {
             item.value = value;
-            validateFormItem(item, context.model.items);
+            validateFormItem(item, context.model);
 
-            context.setModel({...context.model});
+            context.setModel([...context.model]);
         }
 
-        if (props.changeFunction) {
-            props.changeFunction(value);
+        if (props.onChange) {
+            props.onChange(value);
         }
     }
 
     return (
-        <div className={"form-item" + ((item?.value??"".toString()).length > 0 ? " filled" : "") + (item?.isValid === false ? " error" : "") + (props.classNames ? " " + props.classNames : "")}>
+        <div className={"form-item" + ((item?.value ?? "".toString()).length > 0 ? " filled" : "") + (item?.isValid === false ? " error" : "") + (props.classNames ? " " + props.classNames : "")}>
             {props.label &&
                 <label>{props.label}</label>
             }
             <NumberFormat
                 name={props.name}
-                value={props.value}
+                value={item?.value}
                 thousandSeparator={props.customization?.thousandSeparator}
                 decimalSeparator={props.customization?.decimalSeparator}
                 decimalScale={props.customization?.decimalScale}
@@ -79,7 +72,18 @@ const InputNumber = (props: InputNumberProps) => {
                 prefix={props.customization?.prefix}
                 placeholder={props.placeholder}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => { handleChange(e.target.value) }}
-                {...(props.isDisabled ? {disabled: true} : {})}
+                onKeyPress={props.onKeyPress}
+                onKeyDown={props.onKeyDown}
+                onKeyUp={props.onKeyUp}
+                onFocus={props.onFocus}
+                onBlur={props.onBlur}
+                onClick={props.onClick}
+                onMouseDown={props.onMouseDown}
+                onMouseUp={props.onMouseUp}
+                onMouseMove={props.onMouseMove}
+                onMouseEnter={props.onMouseEnter}
+                onMouseLeave={props.onMouseLeave}
+                {...(props.isDisabled ? { disabled: true } : {})}
             />
             {props.children}
             <ErrorMessage rules={item?.rules} />
