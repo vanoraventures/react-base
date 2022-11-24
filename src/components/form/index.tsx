@@ -68,66 +68,76 @@ export const FormContext = React.createContext<FormContextType | null>(null) as 
  */
 const Form = (props: FormProps) => {
     const [model, setModel] = useState<FormItem[]>([]);
+    const form = useForm();
+
+    form.get = (name: string): FormItem | undefined => {
+        return model.find(x => x.name === name);
+    };
+
+    form.getAll = (): any => {
+        return model;
+    };
+
+    form.getAllJson = (): any => {
+        let jsonModel: any = {};
+
+        model.forEach((item, index) => {
+            jsonModel[item.name] = item.value;
+        });
+
+        return jsonModel;
+    };
+
+    form.getVal = (name: string): string => {
+        return model.find(x => x.name === name)?.value ?? "";
+    };
+
+    form.setVal = (name: string, value: string) => {
+        const item = model.find(x => x.name === name);
+
+        if (item) {
+            item.value = value;
+            setModel([...model]);
+        }
+    };
+
+    form.validate = (name: string): boolean => {
+        const item = model.find(x => x.name === name);
+
+        if (item) {
+            validateFormItem(item, model);
+        }
+
+        return item?.isValid ?? true;
+    };
+
+    form.validateAll = (): boolean => {
+        model.forEach(item => {
+            validateFormItem(item, model);
+        });
+
+        return model.every(x => x.isValid);
+    };
+
+    form.isValid = (name: string): boolean => {
+        return model.find(x => x.name === name)?.isValid ?? false;
+    };
 
     if (props.form) {
-        props.form.get = (name: string): FormItem | undefined => {
-            return model.find(x => x.name === name);
-        };
-
-        props.form.getAll = (): any => {
-            return model;
-        };
-
-        props.form.getAllJson = (): any => {
-            let jsonModel: any = {};
-
-            model.forEach((item, index) => {
-                jsonModel[item.name] = item.value;
-            });
-
-            return jsonModel;
-        };
-
-        props.form.getVal = (name: string): string => {
-            return model.find(x => x.name === name)?.value ?? "";
-        };
-
-        props.form.setVal = (name: string, value: string) => {
-            const item = model.find(x => x.name === name);
-
-            if (item) {
-                item.value = value;
-                setModel([...model]);
-            }
-        };
-
-        props.form.validate = (name: string): boolean => {
-            const item = model.find(x => x.name === name);
-
-            if (item) {
-                validateFormItem(item, model);
-            }
-
-            return item?.isValid ?? true;
-        };
-
-        props.form.validateAll = (): boolean => {
-            model.forEach(item => {
-                validateFormItem(item, model);
-            });
-
-            return model.every(x => x.isValid);
-        };
-
-        props.form.isValid = (name: string): boolean => {
-            return model.find(x => x.name === name)?.isValid ?? false;
-        };
+        props.form.get = form.get;
+        props.form.getAll = form.getAll;
+        props.form.getAllJson = form.getAllJson;
+        props.form.getVal = form.getVal;
+        props.form.setVal = form.setVal;
+        props.form.validate = form.validate;
+        props.form.validateAll = form.validateAll;
+        props.form.isValid = form.isValid;
     }
 
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
 
-        if (model && props.form?.validateAll()) {
+        if (model && form.validateAll()) {
             if (props.onSubmit) {
                 props.onSubmit(model);
             }

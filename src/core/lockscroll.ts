@@ -4,7 +4,7 @@ import shallow from 'zustand/shallow'
 /**
  * Returns two functions [lockScroll, unlockScroll]
  */
-function useLockScroll(): [Function, Function] {
+function useLockScroll(): [() => void, () => void] {
     const [scroll, setScroll] = useNoyirmibirStore(state => [state.scroll, state.setScroll], shallow)
 
     const lockScroll = () => {

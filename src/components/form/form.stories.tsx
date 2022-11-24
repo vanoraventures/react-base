@@ -20,16 +20,10 @@ const Template: Story = (args) => {
 
     return <Noyirmibir>
         <>
-            <Form form={form} onSubmit={(model: FormItem[]) => console.log(form.getAllJson())}>
-                {() => <>
-                    <>
-                        {form.getVal("foreign") == "true" &&
-                            <InputText name='fullname' rules={[Validate.Required()]}></InputText>
-                        }
-                    </>
-                    <Checkbox name='foreign' label='Yabancı' value='true'></Checkbox>
-                    <button>Submit</button>
-                </>}
+            <Form form={form} onSubmit={(model: FormItem[]) => console.log(model)}>
+                <InputText name='fullname' rules={[Validate.Required()]}></InputText>
+                <Checkbox name='foreign' label='Yabancı' value='true'></Checkbox>
+                <button>Submit</button>
             </Form>
             <button onClick={() => { form.setVal("fullname", "asd") }}>Change</button>
         </>

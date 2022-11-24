@@ -12,7 +12,7 @@ export default {
 const Template: Story = (args) =>
     <Noyirmibir>
         <Accordion {...args}>
-        <AccordionItem onOpen={() => { console.log("open") }} onClose={() => { console.log("close") }}>
+            <AccordionItem onOpen={() => { console.log("open") }} onClose={() => { console.log("close") }}>
                 <AccordionHeader>
                     Header
                 </AccordionHeader>
