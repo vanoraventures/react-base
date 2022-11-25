@@ -8,21 +8,27 @@ export type Prevention = {
 export enum PreventionType {
     OnlyNumber,
     OnlyText,
+    OnlyEmail,
     Custom
 }
 
 export const Prevent = {
-    OnlyNumber: () : Prevention => {
+    OnlyNumber: (): Prevention => {
         return {
             type: PreventionType.OnlyNumber
         }
     },
-    OnlyText: () : Prevention => {
+    OnlyText: (): Prevention => {
         return {
-            type: PreventionType.OnlyNumber
+            type: PreventionType.OnlyText
         }
     },
-    Custom: (rule: (event: React.KeyboardEvent) => void) : Prevention => {
+    OnlyEmail: (): Prevention => {
+        return {
+            type: PreventionType.OnlyEmail
+        }
+    },
+    Custom: (rule: (event: React.KeyboardEvent) => void): Prevention => {
         return {
             type: PreventionType.Custom,
             rule: rule
@@ -38,6 +44,9 @@ export const preventKey = (event: React.KeyboardEvent, rule?: Prevention) => {
         else if (rule.type === PreventionType.OnlyText) {
             return allowOnlyText(event);
         }
+        else if (rule.type === PreventionType.OnlyEmail) {
+            return allowOnlyEmail(event);
+        }
         else if (rule.type === PreventionType.Custom && rule.rule) {
             return rule.rule(event);
         }
@@ -45,7 +54,7 @@ export const preventKey = (event: React.KeyboardEvent, rule?: Prevention) => {
 }
 
 const allowOnlyNumber = (event: React.KeyboardEvent) => {
-    if("0123456789".indexOf(event.key) === -1) {
+    if ("0123456789".indexOf(event.key) === -1) {
         event.preventDefault();
         return false;
     }
@@ -54,7 +63,16 @@ const allowOnlyNumber = (event: React.KeyboardEvent) => {
 }
 
 const allowOnlyText = (event: React.KeyboardEvent) => {
-    if(/^[a-zA-Z@]+$/.test(event.key)) {
+    if (!(/^[a-zA-ZşŞçÇğĞüÜöÖıİ ]+$/.test(event.key))) {
+        event.preventDefault();
+        return false;
+    }
+
+    return true;
+}
+
+const allowOnlyEmail = (event: React.KeyboardEvent) => {
+    if (!(/[a-zA-Z0-9@._-]/g.test(event.key))) {
         event.preventDefault();
         return false;
     }

@@ -5,6 +5,7 @@ import Form, { FormContext, FormItem, useForm } from ".";
 import { Validate } from './models/validations';
 import InputText from "./items/input-text";
 import Checkbox from "./items/checkbox";
+import { Prevent } from "./models/preventions";
 
 export default {
     title: "noyirmibir-react/form",
@@ -20,8 +21,8 @@ const Template: Story = (args) => {
 
     return <Noyirmibir>
         <>
-            <Form form={form} onSubmit={(model: FormItem[]) => console.log(model)}>
-                <InputText name='fullname' rules={[Validate.Required()]}></InputText>
+            <Form form={form} onSubmit={(model: FormItem[]) => alert(model)}>
+                <InputText name='fullname' rules={[Validate.Required()]} prevention={Prevent.OnlyEmail()}></InputText>
                 <Checkbox name='foreign' label='Yabancı' value='true'></Checkbox>
                 <button>Submit</button>
             </Form>
