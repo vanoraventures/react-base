@@ -33,5 +33,6 @@ const Template: Story = (args) =>
 
 export const Sample = Template.bind({});
 Sample.args = {
-    classNames: ""
+    classNames: "",
+    closeOthersOnOpen: false
 };
