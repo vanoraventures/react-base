@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Story } from "@storybook/react";
 import Noyirmibir from "../main";
 import Form, { FormItem, useForm } from ".";
@@ -6,6 +6,7 @@ import { Validate } from './models/validations';
 import InputText from "./items/input-text";
 import Checkbox from "./items/checkbox";
 import { Prevent } from "./models/preventions";
+import InputPassword from "./items/input-password";
 
 export default {
     title: "noyirmibir-react/form",
@@ -15,17 +16,15 @@ export default {
 const Template: Story = (args) => {
     const form = useForm();
 
-    // setTimeout(() => {
-    //     form.setVal("foreign", "true");
-    // }, 2000);
-
     return <Noyirmibir>
         <>
-            <Form form={form} onSubmit={(model: FormItem[]) => alert(model)}>
+            <Form form={form} onSubmit={(model: FormItem[]) => console.log(model)}>
                 <InputText name='fullname' rules={[Validate.Required()]} prevention={Prevent.OnlyEmail()}></InputText>
+                <InputPassword name='password' rules={[Validate.Required()]}></InputPassword>
                 <Checkbox name='foreign' label='Yabancı' value='true'></Checkbox>
                 <button>Submit</button>
             </Form>
+
             <button onClick={() => { form.setVal("fullname", "asd") }}>Change</button>
         </>
     </Noyirmibir>

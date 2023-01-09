@@ -6,6 +6,7 @@ import ErrorMessage from './errorMessage';
 
 type InputPasswordProps = FormItemProps & FormKeyEvents & FormMouseEvents & {
     isDisabled?: boolean,
+    showPassword?: boolean,
     label?: string,
     placeholder?: string,
     prevention?: Prevention
@@ -55,7 +56,7 @@ const InputPassword = (props: InputPasswordProps) => {
                 <label>{props.label}</label>
             }
             <input
-                type="password"
+                type={props.showPassword ? "text" : "password"}
                 name={props.name}
                 value={item?.value}
                 placeholder={props.placeholder}

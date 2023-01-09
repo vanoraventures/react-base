@@ -2,6 +2,7 @@ import React from "react";
 import { Story } from "@storybook/react";
 import Noyirmibir from "../main";
 import Popup, { PopupProps, usePopup } from ".";
+import useWindowSize from "../../core/resize";
 
 export default {
     title: "noyirmibir-react/popup",
