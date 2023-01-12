@@ -1,9 +1,9 @@
-import React, { MouseEventHandler, ReactElement, useContext, useEffect, useState } from "react";
+import React, { MouseEventHandler, useContext, useEffect, useState } from "react";
 import "./accordion.scss";
 
 type Props = {
     classNames?: string,
-    children: ReactElement[] | ReactElement | string,
+    children: JSX.Element | JSX.Element[] | string,
     onClick?: MouseEventHandler<HTMLElement>,
     onMouseDown?: MouseEventHandler<HTMLElement>,
     onMouseUp?: MouseEventHandler<HTMLElement>,

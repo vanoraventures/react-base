@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, ReactElement } from "react";
+import React, { MouseEventHandler } from "react";
 import useWindowSize from "../../core/resize";
 import "./background.scss";
 
@@ -7,7 +7,7 @@ export type BackgroundProps = {
     mobile?: string,
     isSection?: boolean,
     classNames?: string,
-    children?: ReactElement[] | ReactElement | string,
+    children?: JSX.Element | JSX.Element[] | string,
     onClick?: MouseEventHandler<HTMLElement>,
     onMouseDown?: MouseEventHandler<HTMLElement>,
     onMouseUp?: MouseEventHandler<HTMLElement>,

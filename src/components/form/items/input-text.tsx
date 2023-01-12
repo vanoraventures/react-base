@@ -15,26 +15,26 @@ type InputTextProps = FormItemProps & FormKeyEvents & FormMouseEvents & {
 
 const InputText = (props: InputTextProps) => {
     const context = useContext(FormContext);
-    const item = context.model.find(x => x.name === props.name)??{
-        name: props.name,
-        value: props.value ?? "",
-        rules: props.rules,
-        isValid: (props.rules ? props.isValid : true)
-    };
+    const item = context.model.find(x => x.name === props.name);
 
     useEffect(() => {
         if (context.model.some(x => x.name === props.name)) {
             throw new Error("Development error ---> Each form element must have unique name!");
         }
 
-        context.model.push(item);
+        context.setModel(model => {
+            model.push({
+                name: props.name,
+                value: props.value ?? "",
+                rules: props.rules,
+                isValid: (props.rules ? props.isValid : true)
+            });
 
-        context.setModel([...context.model]);
+            return [...model];
+        });
 
         return () => {
-            context.model = context.model.filter(x => x.name !== props.name);
-
-            context.setModel([...context.model]);
+            context.setModel(model => [...model.filter(x => x.name !== props.name)]);
         }
     }, []);
 

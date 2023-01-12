@@ -1,9 +1,9 @@
-import React, { MouseEventHandler, ReactElement, useContext, useEffect, useState } from "react";
+import React, { MouseEventHandler, useContext, useEffect, useState } from "react";
 import "./tabs.scss";
 
 type Props = {
     classNames?: string,
-    children: ReactElement[] | ReactElement | string,
+    children: JSX.Element | JSX.Element[] | string,
     onClick?: MouseEventHandler<HTMLElement>,
     onMouseDown?: MouseEventHandler<HTMLElement>,
     onMouseUp?: MouseEventHandler<HTMLElement>,
@@ -55,7 +55,7 @@ const Tabs = (props: TabsProps) => {
 /**
  * Must have TabMenuItem components
  */
-export const TabMenu = (props: Props & { children: ReactElement[] }) => {
+export const TabMenu = (props: Props & { children: JSX.Element[] }) => {
     return (
         <div
             className={"tab-menu" + (props.classNames ? " " + props.classNames : "")}
@@ -103,7 +103,7 @@ export const TabMenuItem = (props: Props & { index?: number }) => {
 /**
  * Must have TabItem components
  */
-export const TabContainer = (props: Props & { children: ReactElement[] }) => {
+export const TabContainer = (props: Props & { children: JSX.Element[] }) => {
     const context = useContext(TabContext);
 
     return (

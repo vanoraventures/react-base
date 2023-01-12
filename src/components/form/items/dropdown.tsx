@@ -1,13 +1,13 @@
 import Select from 'react-select'
 import ErrorMessage from "./errorMessage";
-import { KeyboardEventHandler, ReactElement, useContext, useEffect, useState } from "react";
+import { KeyboardEventHandler, useContext, useEffect, useState } from "react";
 import React from 'react';
 import { validateFormItem } from '../models/validations';
 import { FormContext, FormItemProps } from '..';
 
 type DropdownProps = FormItemProps & {
     label?: string,
-    placeholder?: string | ReactElement,
+    placeholder?: JSX.Element | string,
     isDisabled?: boolean,
     options: {
         value: string | React.ReactElement | React.ReactElement[],
@@ -28,19 +28,19 @@ const Dropdown = (props: DropdownProps) => {
             throw new Error("Development error ---> Each form element must have unique name!");
         }
 
-        context.model.push({
-            name: props.name,
-            value: props.value ?? "",
-            rules: props.rules,
-            isValid: (props.rules ? props.isValid : true)
+        context.setModel(model => {
+            model.push({
+                name: props.name,
+                value: props.value ?? "",
+                rules: props.rules,
+                isValid: (props.rules ? props.isValid : true)
+            });
+
+            return [...model];
         });
 
-        context.setModel([...context.model]);
-
         return () => {
-            context.model = context.model.filter(x => x.name !== props.name);
-
-            context.setModel([...context.model]);
+            context.setModel(model => [...model.filter(x => x.name !== props.name)]);
         }
     }, []);
 

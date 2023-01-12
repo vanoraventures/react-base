@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useLockScroll from "../../core/lockscroll";
 import "./popup.scss";
 
@@ -6,7 +6,7 @@ export type PopupProps = {
     popup?: Popup,
     isOpen?: boolean,
     classNames?: string,
-    children: ReactElement[] | ReactElement | string,
+    children: JSX.Element | JSX.Element[] | string,
     onOpen?: () => void,
     onClose?: () => void
 }

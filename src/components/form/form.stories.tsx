@@ -19,10 +19,20 @@ const Template: Story = (args) => {
     return <Noyirmibir>
         <>
             <Form form={form} onSubmit={(model: FormItem[]) => console.log(model)}>
-                <InputText name='fullname' rules={[Validate.Required()]} prevention={Prevent.OnlyEmail()}></InputText>
-                <InputPassword name='password' rules={[Validate.Required()]}></InputPassword>
-                <Checkbox name='foreign' label='Yabancı' value='true'></Checkbox>
-                <button>Submit</button>
+                {() => {
+                    console.log("state", form.getAll()?.map(x => x.name).join("-"));
+
+                    return <>
+                        <InputText key={"test1"} name='fullname' rules={[Validate.Required()]} prevention={Prevent.OnlyEmail()}></InputText>
+                        {form.getVal("foreign") == "true" ?
+                            <InputText key={"test2"} name='fullnamea' rules={[Validate.Required()]} prevention={Prevent.OnlyEmail()}></InputText>
+                            :
+                            <InputPassword key={"test3"} name='password' rules={[Validate.Required()]}></InputPassword>
+                        }
+                        <Checkbox key={"test4"} name='foreign' label='Yabancı' value='true'></Checkbox>
+                        <button>Submit</button>
+                    </>
+                }}
             </Form>
 
             <button onClick={() => { form.setVal("fullname", "asd") }}>Change</button>

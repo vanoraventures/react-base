@@ -1,4 +1,4 @@
-import React, { Dispatch, FocusEventHandler, KeyboardEventHandler, MouseEventHandler, ReactElement, ReactNode, useEffect, useState } from "react";
+import React, { FocusEventHandler, KeyboardEventHandler, MouseEventHandler, ReactNode, useState } from "react";
 import { validateFormItem, Validation } from "./models/validations";
 import "./form.scss";
 
@@ -18,7 +18,7 @@ type FormProps = {
     onError?: (model: any) => void,
     form?: Form,
     classNames?: string,
-    children: ReactElement[] | ReactElement | string | (() => ReactNode)
+    children: JSX.Element | JSX.Element[] | string | (() => JSX.Element)
 }
 
 export type FormItem = {
@@ -35,7 +35,7 @@ export type FormItemProps = {
     rules?: Validation[],
     isValid?: boolean,
     classNames?: string,
-    children?: ReactElement[] | ReactElement | string,
+    children?: JSX.Element | JSX.Element[] | string,
     onChange?: (value: string) => void,
     onFocus?: FocusEventHandler<HTMLElement>,
     onBlur?: FocusEventHandler<HTMLElement>
@@ -151,7 +151,7 @@ const Form = (props: FormProps) => {
 
     return (
         <FormContext.Provider value={{ model, setModel }}>
-            <form className={"general" + (props.classNames ? " " + props.classNames : "")} onSubmit={handleSubmit} noValidate>
+            <form className={(props.classNames ? " " + props.classNames : "general")} onSubmit={handleSubmit} noValidate>
                 {(typeof props.children).toLocaleLowerCase() == "function" ?
                     (props.children as Function)()
                     :

@@ -1,10 +1,10 @@
-import React, { ReactElement, useEffect } from "react";
+import React, { useEffect } from "react";
 import create from "zustand";
 import "./global.scss";
 
 type MainProps = {
-    children: ReactElement,
-    loadingWrapper?: ReactElement
+    children: JSX.Element | JSX.Element[],
+    loadingWrapper?: JSX.Element
 }
 
 type NoyirmibirStore = {
@@ -73,7 +73,7 @@ const Noyirmibir = (props: MainProps) => {
     </>;
 };
 
-const Loading = (props: { wrapper?: ReactElement }) => {
+const Loading = (props: { wrapper?: JSX.Element }) => {
     const count = useNoyirmibirStore(state => state.loading.count);
 
     if (count > 0) {

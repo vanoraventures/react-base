@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { FormContext, FormItemProps, FormMouseEvents } from '..';
 import { validateFormItem } from '../models/validations';
 import ErrorMessage from './errorMessage';
@@ -6,7 +6,7 @@ import ErrorMessage from './errorMessage';
 type RadioProps = FormItemProps & FormMouseEvents & {
     options: {
         value: string,
-        label: string | ReactElement | ReactElement[],
+        label: JSX.Element | JSX.Element[] | string,
         isDisabled?: boolean
     }[]
 }
@@ -19,20 +19,20 @@ const Radio = (props: RadioProps) => {
         if (context.model.some(x => x.name === props.name)) {
             throw new Error("Development error ---> Each form element must have unique name!");
         }
+        
+        context.setModel(model => {
+            model.push({
+                name: props.name,
+                value: props.value ?? "",
+                rules: props.rules,
+                isValid: (props.rules ? props.isValid : true)
+            });
 
-        context.model.push({
-            name: props.name,
-            value: props.value ?? "",
-            rules: props.rules,
-            isValid: (props.rules ? props.isValid : true)
+            return [...model];
         });
 
-        context.setModel([...context.model]);
-
         return () => {
-            context.model = context.model.filter(x => x.name !== props.name);
-
-            context.setModel([...context.model]);
+            context.setModel(model => [...model.filter(x => x.name !== props.name)]);
         }
     }, []);
 
