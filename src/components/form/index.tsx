@@ -3,6 +3,7 @@ import { validateFormItem, Validation } from "./models/validations";
 import "./form.scss";
 
 export type Form = {
+    submit: () => void,
     get: (name: string) => FormItem | undefined,
     getAll: () => FormItem[] | undefined
     getAllJson: () => any,
@@ -123,19 +124,8 @@ const Form = (props: FormProps) => {
         return model.find(x => x.name === name)?.isValid ?? false;
     };
 
-    if (props.form) {
-        props.form.get = form.get;
-        props.form.getAll = form.getAll;
-        props.form.getAllJson = form.getAllJson;
-        props.form.getVal = form.getVal;
-        props.form.setVal = form.setVal;
-        props.form.validate = form.validate;
-        props.form.validateAll = form.validateAll;
-        props.form.isValid = form.isValid;
-    }
-
-    const handleSubmit = (e: React.SyntheticEvent) => {
-        e.preventDefault();
+    const handleSubmit = (e?: React.SyntheticEvent) => {
+        e?.preventDefault();
 
         if (model && form.validateAll()) {
             if (props.onSubmit) {
@@ -147,6 +137,18 @@ const Form = (props: FormProps) => {
         }
 
         setModel([...model]);
+    }
+
+    if (props.form) {
+        props.form.submit = handleSubmit;
+        props.form.get = form.get;
+        props.form.getAll = form.getAll;
+        props.form.getAllJson = form.getAllJson;
+        props.form.getVal = form.getVal;
+        props.form.setVal = form.setVal;
+        props.form.validate = form.validate;
+        props.form.validateAll = form.validateAll;
+        props.form.isValid = form.isValid;
     }
 
     return (
@@ -167,6 +169,7 @@ const Form = (props: FormProps) => {
  */
 export function useForm(): Form {
     return {
+        submit: () => {},
         get: () => undefined,
         getAll: () => undefined,
         getAllJson: () => undefined,

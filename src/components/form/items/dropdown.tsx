@@ -13,9 +13,9 @@ type DropdownProps = FormItemProps & {
         value: string | React.ReactElement | React.ReactElement[],
         label: string
     }[],
-    onKeyDown: KeyboardEventHandler<HTMLElement>,
-    onMenuOpen: () => void,
-    onMenuClose: () => void
+    onKeyDown?: KeyboardEventHandler<HTMLElement>,
+    onMenuOpen?: () => void,
+    onMenuClose?: () => void
 }
 
 const Dropdown = (props: DropdownProps) => {

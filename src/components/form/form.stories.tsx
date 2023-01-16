@@ -20,7 +20,7 @@ const Template: Story = (args) => {
         <>
             <Form form={form} onSubmit={(model: FormItem[]) => console.log(model)}>
                 {() => {
-                    console.log("state", form.getAll()?.map(x => x.name).join("-"));
+                    // console.log("state", form.getAll()?.map(x => x.name).join("-"));
 
                     return <>
                         <InputText key={"test1"} name='fullname' rules={[Validate.Required()]} prevention={Prevent.OnlyEmail()}></InputText>
@@ -35,7 +35,7 @@ const Template: Story = (args) => {
                 }}
             </Form>
 
-            <button onClick={() => { form.setVal("fullname", "asd") }}>Change</button>
+            <button onClick={() => { form.submit(); }}>Change</button>
         </>
     </Noyirmibir>
 };
