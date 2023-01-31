@@ -4,6 +4,7 @@ import "./form.scss";
 
 export type Form = {
     submit: () => void,
+    clear: () => void,
     get: (name: string) => FormItem | undefined,
     getAll: () => FormItem[] | undefined
     getAllJson: () => any,
@@ -124,6 +125,18 @@ const Form = (props: FormProps) => {
         return model.find(x => x.name === name)?.isValid ?? false;
     };
 
+    form.clear = () => {
+        model.forEach(item => {
+            item.value = "";
+            item.isValid = undefined;
+            item.rules?.forEach(rule => {
+                rule.isValid = undefined;
+            });
+        });
+
+        setModel([...model]);
+    }
+
     const handleSubmit = (e?: React.SyntheticEvent) => {
         e?.preventDefault();
 
@@ -141,6 +154,7 @@ const Form = (props: FormProps) => {
 
     if (props.form) {
         props.form.submit = handleSubmit;
+        props.form.clear = form.clear;
         props.form.get = form.get;
         props.form.getAll = form.getAll;
         props.form.getAllJson = form.getAllJson;
@@ -170,6 +184,7 @@ const Form = (props: FormProps) => {
 export function useForm(): Form {
     return {
         submit: () => {},
+        clear: () => {},
         get: () => undefined,
         getAll: () => undefined,
         getAllJson: () => undefined,

@@ -7,6 +7,7 @@ import InputText from "./items/input-text";
 import Checkbox from "./items/checkbox";
 import { Prevent } from "./models/preventions";
 import InputPassword from "./items/input-password";
+import Radio from "./items/radio";
 
 export default {
     title: "noyirmibir-react/form",
@@ -20,22 +21,25 @@ const Template: Story = (args) => {
         <>
             <Form form={form} onSubmit={(model: FormItem[]) => console.log(model)}>
                 {() => {
-                    // console.log("state", form.getAll()?.map(x => x.name).join("-"));
-
                     return <>
-                        <InputText key={"test1"} name='fullname' rules={[Validate.Required()]} prevention={Prevent.OnlyEmail()}></InputText>
+                        <InputText name='fullname' rules={[Validate.Custom((value: string) => value.charAt(0) == "a")]} prevention={Prevent.OnlyEmail()}></InputText>
                         {form.getVal("foreign") == "true" ?
-                            <InputText key={"test2"} name='fullnamea' rules={[Validate.Required()]} prevention={Prevent.OnlyEmail()}></InputText>
+                            <InputText name='fullnamea' placeholder="passport" rules={[Validate.Required()]} prevention={Prevent.OnlyEmail()}></InputText>
                             :
-                            <InputPassword key={"test3"} name='password' rules={[Validate.Required()]}></InputPassword>
+                            <InputPassword name='password' placeholder="tc kimlik" rules={[Validate.Required()]}></InputPassword>
                         }
-                        <Checkbox key={"test4"} name='foreign' label='Yabancı' value='true'></Checkbox>
+                        <Checkbox name='foreign' label='Yabancı' value='asdad'></Checkbox>
+                        {/* <Radio name="test" options={[
+                            { value: "1", label: "test" },
+                            { value: "2", label: "test2" },
+                            { value: "3", label: "test3" }
+                        ]}></Radio> */}
                         <button>Submit</button>
                     </>
                 }}
             </Form>
 
-            <button onClick={() => { form.submit(); }}>Change</button>
+            <button onClick={() => { form.clear(); }}>Change</button>
         </>
     </Noyirmibir>
 };

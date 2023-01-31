@@ -8,6 +8,8 @@ type ErrorMessageProps = {
 const ErrorMessage = (props :ErrorMessageProps) => {
     const errorMessage = props.rules?.find(x => x.isValid === false && x.message && x.message.length > 1)?.message;
 
+    //TODO: JSX.Element 
+
     if (errorMessage) {
         return (
             <div className="error-message">{errorMessage}</div>

@@ -1,45 +1,3 @@
-/* Mixins */
-
-@mixin m {
-    @media screen and (max-width: 900px) {
-        @content;
-    }
-}
-
-@mixin d {
-    @media screen and (min-width: 901px) {
-        @content;
-    }
-}
-
-@mixin bg-cover($size: cover) {
-    background-size: $size;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-@mixin bg-image($url, $size: cover) {
-    background-image: url($url);
-    background-size: $size;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-@mixin transition($property: all 0.3s ease) {
-    transition: $property;
-    -webkit-transition: $property;
-    -ms-transition: $property;
-    -moz-transition: $property;
-    -o-transition: $property;
-}
-
-@mixin transform($property) {
-    transform: $property;
-    -webkit-transform: $property;
-    -moz-transform: $property;
-    -ms-transform: $property;
-    -o-transform: $property;
-}
 
 /* General Bootstrap */
 
@@ -50,10 +8,6 @@ html {
     font-variant-ligatures: none;
     -webkit-font-variant-ligatures: none;
     -webkit-font-smoothing: antialiased;
-
-    @include m {
-        font-size: 26.666666vw;
-    }
 }
 
 html.lock {
@@ -93,23 +47,6 @@ strong {
     font-weight: 700;
 }
 
-.vcenter {
-    font-size: 0;
-
-    &:before {
-        content: "";
-        display: inline-block;
-        height: 100%;
-        width: 0;
-        vertical-align: middle;
-    }
-
-    > * {
-        display: inline-block;
-        vertical-align: middle;
-    }
-}
-
 .font {
     * {
         font-family: inherit !important;
@@ -122,59 +59,6 @@ strong {
         width: auto !important;
         height: auto !important;
         max-width: 100% !important;
-    }
-}
-
-/* Loading */
-
-.loading {
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    position: fixed;
-    z-index: 9999;
-    background: rgba(0, 0, 0, 0.75);
-
-    .load {
-        width: 150px;
-        animation: loading 3s linear infinite;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        margin-left: -75px;
-        margin-top: -75px;
-
-        .loading-inner {
-            stroke-dashoffset: 0;
-            stroke-dasharray: 300;
-            stroke-width: 10;
-            stroke-miterlimit: 10;
-            stroke-linecap: round;
-            animation: loading-circle 2s linear infinite;
-            stroke: #1a1a1a;
-            fill: transparent;
-        }
-    }
-
-    @keyframes loading {
-        0% {
-            transform: rotate(0);
-        }
-
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-
-    @keyframes loading-circle {
-        0% {
-            stroke-dashoffset: 0;
-        }
-
-        100% {
-            stroke-dashoffset: -600;
-        }
     }
 }
 

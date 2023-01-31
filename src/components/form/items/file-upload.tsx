@@ -14,6 +14,8 @@ const FileUpload = (props: FileUploadProps) => {
     const input = useRef<HTMLInputElement>(null);
     const reader = new FileReader();
 
+    //TODO: File upload
+
     useEffect(() => {
         if (context.model.some(x => x.name === props.name)) {
             throw new Error("Development error ---> Each form element must have unique name!");
