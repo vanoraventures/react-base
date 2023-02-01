@@ -2,23 +2,25 @@ import React, { FocusEventHandler, KeyboardEventHandler, MouseEventHandler, Reac
 import { validateFormItem, Validation } from "./models/validations";
 import "./form.scss";
 
-export type Form = {
+export type FormType = {
     submit: () => void,
     clear: () => void,
     get: (name: string) => FormItem | undefined,
     getAll: () => FormItem[] | undefined
     getAllJson: () => any,
+    getFormData: () => FormData,
     getVal: (name: string) => string,
     setVal: (name: string, value: string) => void,
+    getData: (name: string) => any,
     validate: (name: string) => boolean,
     validateAll: () => boolean,
     isValid: (name: string) => boolean,
 }
 
 type FormProps = {
-    onSubmit?: (model: any) => void,
-    onError?: (model: any) => void,
-    form?: Form,
+    onSubmit?: (form: FormType) => void,
+    onError?: (form: FormType) => void,
+    form?: FormType,
     classNames?: string,
     children: JSX.Element | JSX.Element[] | string | (() => JSX.Element)
 }
@@ -28,7 +30,7 @@ export type FormItem = {
     value: string,
     rules?: Validation[],
     isValid?: boolean,
-    data?: string
+    data?: any
 }
 
 export type FormItemProps = {
@@ -83,11 +85,21 @@ const Form = (props: FormProps) => {
     form.getAllJson = (): any => {
         let jsonModel: any = {};
 
-        model.forEach((item, index) => {
+        model.forEach(item => {
             jsonModel[item.name] = item.value;
         });
 
         return jsonModel;
+    };
+
+    form.getFormData = (): FormData => {
+        var formData = new FormData();
+
+        model.forEach(item => {
+            formData.append(item.name, item.data??item.value);
+        });
+
+        return formData;
     };
 
     form.getVal = (name: string): string => {
@@ -101,6 +113,10 @@ const Form = (props: FormProps) => {
             item.value = value;
             setModel([...model]);
         }
+    };
+
+    form.getData = (name: string): any => {
+        return model.find(x => x.name === name)?.data ?? "";
     };
 
     form.validate = (name: string): boolean => {
@@ -142,11 +158,11 @@ const Form = (props: FormProps) => {
 
         if (model && form.validateAll()) {
             if (props.onSubmit) {
-                props.onSubmit(model);
+                props.onSubmit(form);
             }
         }
         else if (props.onError) {
-            props.onError(model);
+            props.onError(form);
         }
 
         setModel([...model]);
@@ -158,8 +174,10 @@ const Form = (props: FormProps) => {
         props.form.get = form.get;
         props.form.getAll = form.getAll;
         props.form.getAllJson = form.getAllJson;
+        props.form.getFormData = form.getFormData;
         props.form.getVal = form.getVal;
         props.form.setVal = form.setVal;
+        props.form.getData = form.getData;
         props.form.validate = form.validate;
         props.form.validateAll = form.validateAll;
         props.form.isValid = form.isValid;
@@ -181,15 +199,17 @@ const Form = (props: FormProps) => {
 /**
  * Returns an object to give props to form component for full control on form. In most cases you should use function statement for form's children to re-render.
  */
-export function useForm(): Form {
+export function useForm(): FormType {
     return {
         submit: () => {},
         clear: () => {},
         get: () => undefined,
         getAll: () => undefined,
         getAllJson: () => undefined,
+        getFormData: () => new FormData(),
         getVal: () => "",
         setVal: () => { },
+        getData: () => undefined,
         validate: () => false,
         validateAll: () => false,
         isValid: () => false

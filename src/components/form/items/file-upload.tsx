@@ -5,16 +5,14 @@ import ErrorMessage from './errorMessage';
 
 type FileUploadProps = FormItemProps & FormKeyEvents & FormMouseEvents & {
     isDisabled?: boolean,
-    label?: string
+    label?: string,
+    allowedTypes?: string
 }
 
 const FileUpload = (props: FileUploadProps) => {
     const context = useContext(FormContext);
     const item = context.model.find(x => x.name === props.name);
     const input = useRef<HTMLInputElement>(null);
-    const reader = new FileReader();
-
-    //TODO: File upload
 
     useEffect(() => {
         if (context.model.some(x => x.name === props.name)) {
@@ -39,55 +37,26 @@ const FileUpload = (props: FileUploadProps) => {
     }, []);
 
     const handleChange = (value: string) => {
-        if (input && input.current && input.current.files && input.current.files.length > 0) {
-            reader.readAsDataURL(input.current.files[0]);
-        }
-        else {
+        if (item) {
             if (input && input.current) {
-                input.current.value = "";
-
-                if (item) {
+                if (input.current.files && input.current.files.length > 0) {
+                    item.data = input.current.files[0];
+                }
+                else {
                     item.data = "";
-                    context.setModel([...context.model]);
                 }
             }
-        }
 
-        if (item) {
             item.value = value;
             validateFormItem(item, context.model);
 
             context.setModel([...context.model]);
-        }
 
-        if (props.onChange) {
-            props.onChange(value);
+            if (props.onChange) {
+                props.onChange(value);
+            }
         }
     }
-
-    reader.addEventListener("load", function () {
-        if (item) {
-            item.data = reader.result as string;
-            context.setModel([...context.model]);
-        }
-    }, false);
-
-    // let btnUploadClick = (e: React.MouseEvent) => {
-    //     input.current?.click();
-    // }
-
-    // let btnRemoveClick = (e: React.MouseEvent) => {
-    //     if (input && input.current) {
-    //         const item = context.model.find(x => x.name === props.name);
-
-    //         input.current.value = "";
-
-    //         if (item) {
-    //             item.data = "";
-    //             context.setModel([...context.model]);
-    //         }
-    //     }
-    // }
 
     return (
         <div className={"form-item" + ((item?.value ?? "".toString()).length > 0 ? " filled" : "") + (item?.isValid === false ? " error" : "") + (props.classNames ? " " + props.classNames : "")}>
@@ -112,6 +81,7 @@ const FileUpload = (props: FileUploadProps) => {
                 onMouseEnter={props.onMouseEnter}
                 onMouseLeave={props.onMouseLeave}
                 {...(props.isDisabled ? { disabled: true } : {})}
+                {...(props.allowedTypes ? { accept: props.allowedTypes } : {})}
             />
             {props.children}
             <ErrorMessage rules={item?.rules} />

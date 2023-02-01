@@ -4,7 +4,7 @@ export { default as Accordion, AccordionItem, AccordionBody, AccordionHeader } f
 export { default as Popup, usePopup } from "./popup";
 export { default as Image } from "./image";
 export { default as Background } from "./background";
-export { default as Form, FormContext, FormItem, useForm } from "./form";
+export { default as Form, FormContext, FormType, FormItem, useForm } from "./form";
 export { default as Checkbox } from "./form/items/checkbox";
 export { default as Dropdown } from "./form/items/dropdown";
 export { default as FileUpload } from "./form/items/file-upload";
