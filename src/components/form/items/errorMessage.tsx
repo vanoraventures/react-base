@@ -5,18 +5,22 @@ type ErrorMessageProps = {
     rules?: Validation[]
 }
 
-const ErrorMessage = (props :ErrorMessageProps) => {
-    const errorMessage = props.rules?.find(x => x.isValid === false && x.message && x.message.length > 1)?.message;
+const ErrorMessage = (props: ErrorMessageProps) => {
+    const errorMessage = props.rules?.find(x => x.isValid === false && x.message)?.message;
 
-    //TODO: JSX.Element 
-
-    if (errorMessage) {
-        return (
-            <div className="error-message">{errorMessage}</div>
-        )
-    }
-
-    return (null);
+    return <>
+        {errorMessage ?
+            <>
+                {typeof(errorMessage) == "string" ?
+                    <div className="error-message">{errorMessage}</div>
+                    :
+                    errorMessage
+                }
+            </>
+            :
+            null
+        }
+    </>
 }
 
 export default ErrorMessage;

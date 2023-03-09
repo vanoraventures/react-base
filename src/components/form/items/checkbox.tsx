@@ -22,8 +22,8 @@ const Checkbox = (props: CheckboxProps) => {
             model.push({
                 name: props.name,
                 value: props.checked ? props.value ?? "" : "",
-                rules: props.rules,
-                isValid: (props.rules ? props.isValid : true)
+                validations: props.validations,
+                isValid: (props.validations ? props.isValid : true)
             });
 
             return [...model];
@@ -67,7 +67,7 @@ const Checkbox = (props: CheckboxProps) => {
             />
             <label htmlFor={props.name}>{props.label}</label>
             {props.children}
-            <ErrorMessage rules={item?.rules} />
+            <ErrorMessage rules={item?.validations} />
         </div>
     )
 }

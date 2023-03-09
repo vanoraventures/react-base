@@ -20,4 +20,4 @@ export { default as RangeSlider } from "./form/items/range-slider";
 export { default as Textarea } from "./form/items/textarea";
 export { default as ErrorMessage } from "./form/items/errorMessage";
 export { Validation, ValidationType, Validate } from "./form/models/validations";
-export { Prevention, PreventionType, Prevent } from "./form/models/preventions";
+export { Permission, PermissionType, Permit } from "./form/models/permissions";

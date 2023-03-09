@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import ErrorMessage from './errorMessage';
 import InputMask from "react-input-mask";
-import { Prevention, preventKey } from '../models/preventions';
+import { permitKey, Permission } from '../models/permissions';
 import { FormContext, FormItemProps, FormKeyEvents, FormMouseEvents } from '..';
 import { validateFormItem } from '../models/validations';
 
@@ -9,7 +9,7 @@ type InputTextProps = FormItemProps & FormKeyEvents & FormMouseEvents & {
     isDisabled?: boolean,
     label?: string,
     placeholder?: string,
-    prevention?: Prevention,
+    permissions?: Permission[]
     mask?: string | (string | RegExp)[]
 }
 
@@ -26,8 +26,9 @@ const InputText = (props: InputTextProps) => {
             model.push({
                 name: props.name,
                 value: props.value ?? "",
-                rules: props.rules,
-                isValid: (props.rules ? props.isValid : true)
+                validations: props.validations,
+                permissions: props.permissions,
+                isValid: (props.validations ? props.isValid : true)
             });
 
             return [...model];
@@ -64,7 +65,7 @@ const InputText = (props: InputTextProps) => {
                     value={item?.value}
                     mask={props.mask}
                     onChange={(e) => { handleChange(e.target.value) }}
-                    onKeyPress={(e) => { preventKey(e, props.prevention); if (props.onKeyPress) { props.onKeyPress(e); } }}
+                    onKeyPress={(e) => { permitKey(e, item); if (props.onKeyPress) { props.onKeyPress(e); } }}
                     onKeyDown={props.onKeyDown}
                     onKeyUp={props.onKeyUp}
                     onFocus={props.onFocus}
@@ -84,7 +85,7 @@ const InputText = (props: InputTextProps) => {
                     placeholder={props.placeholder}
                     value={item?.value}
                     onChange={(e) => { handleChange(e.target.value) }}
-                    onKeyPress={(e) => { preventKey(e, props.prevention); if (props.onKeyPress) { props.onKeyPress(e); } }}
+                    onKeyPress={(e) => { permitKey(e, item); if (props.onKeyPress) { props.onKeyPress(e); } }}
                     onKeyDown={props.onKeyDown}
                     onKeyUp={props.onKeyUp}
                     onFocus={props.onFocus}
@@ -99,7 +100,7 @@ const InputText = (props: InputTextProps) => {
                 />
             }
             {props.children}
-            <ErrorMessage rules={item?.rules} />
+            <ErrorMessage rules={item?.validations} />
         </div>
     )
 }

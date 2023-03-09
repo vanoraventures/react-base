@@ -8,7 +8,10 @@ import { FormContext, FormItemProps } from '..';
 type DropdownProps = FormItemProps & {
     label?: string,
     placeholder?: JSX.Element | string,
+    isRtl?: boolean,
     isDisabled?: boolean,
+    isSearchable?: boolean,
+    isClearable?: boolean,
     options: {
         value: string | React.ReactElement | React.ReactElement[],
         label: string
@@ -32,8 +35,8 @@ const Dropdown = (props: DropdownProps) => {
             model.push({
                 name: props.name,
                 value: props.value ?? "",
-                rules: props.rules,
-                isValid: (props.rules ? props.isValid : true)
+                validations: props.validations,
+                isValid: (props.validations ? props.isValid : true)
             });
 
             return [...model];
@@ -70,7 +73,6 @@ const Dropdown = (props: DropdownProps) => {
                 classNamePrefix="select"
                 placeholder={props.placeholder}
                 name={props.name}
-                isSearchable={false}
                 value={item?.value === "" || item?.value === undefined || item?.value === null ? null : props.options?.find(option => option.value === item?.value)}
                 options={props.options}
                 onChange={(e) => { handleChange(e?.value) }}
@@ -80,9 +82,12 @@ const Dropdown = (props: DropdownProps) => {
                 onMenuOpen={props.onMenuOpen}
                 onMenuClose={props.onMenuClose}
                 isDisabled={props.isDisabled ? true : false}
+                isRtl={props.isRtl}
+                isSearchable={props.isSearchable}
+                isClearable={props.isClearable}
             />
             {props.children}
-            <ErrorMessage rules={item?.rules} />
+            <ErrorMessage rules={item?.validations} />
         </div>
     )
 }

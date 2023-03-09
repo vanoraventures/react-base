@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import { FormContext, FormItemProps } from '..';
-import { Prevention } from '../models/preventions';
 import { validateFormItem } from '../models/validations';
 import ErrorMessage from './errorMessage';
 import InputRange, { Range } from 'react-input-range';
@@ -12,8 +11,7 @@ type RangeSliderProps = FormItemProps & {
     isDisabled?: boolean,
     value?: Range | number,
     formatLabel?: string,
-    label?: string,
-    prevention?: Prevention
+    label?: string
 }
 
 const RangeSlider = (props: RangeSliderProps) => {
@@ -29,8 +27,8 @@ const RangeSlider = (props: RangeSliderProps) => {
             model.push({
                 name: props.name,
                 value: props.value ? JSON.stringify(props.value) : "",
-                rules: props.rules,
-                isValid: (props.rules ? props.isValid : true)
+                validations: props.validations,
+                isValid: (props.validations ? props.isValid : true)
             });
 
             return [...model];
@@ -70,7 +68,7 @@ const RangeSlider = (props: RangeSliderProps) => {
                 }}
             />
             {props.children}
-            <ErrorMessage rules={item?.rules} />
+            <ErrorMessage rules={item?.validations} />
         </div>
     )
 }

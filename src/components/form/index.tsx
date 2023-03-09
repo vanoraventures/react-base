@@ -1,6 +1,7 @@
 import React, { FocusEventHandler, KeyboardEventHandler, MouseEventHandler, ReactNode, useState } from "react";
 import { validateFormItem, Validation } from "./models/validations";
 import "./form.scss";
+import { Permission } from "./models/permissions";
 
 export type FormType = {
     submit: () => void,
@@ -28,7 +29,8 @@ type FormProps = {
 export type FormItem = {
     name: string,
     value: string,
-    rules?: Validation[],
+    validations?: Validation[],
+    permissions?: Permission[],
     isValid?: boolean,
     data?: any
 }
@@ -36,7 +38,7 @@ export type FormItem = {
 export type FormItemProps = {
     name: string,
     value?: string,
-    rules?: Validation[],
+    validations?: Validation[],
     isValid?: boolean,
     classNames?: string,
     children?: JSX.Element | JSX.Element[] | string,
@@ -145,7 +147,7 @@ const Form = (props: FormProps) => {
         model.forEach(item => {
             item.value = "";
             item.isValid = undefined;
-            item.rules?.forEach(rule => {
+            item.validations?.forEach(rule => {
                 rule.isValid = undefined;
             });
         });

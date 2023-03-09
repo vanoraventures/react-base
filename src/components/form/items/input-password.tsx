@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { FormContext, FormItemProps, FormKeyEvents, FormMouseEvents } from '..';
-import { Prevention, preventKey } from '../models/preventions';
+import { permitKey, Permission } from '../models/permissions';
 import { validateFormItem } from '../models/validations';
 import ErrorMessage from './errorMessage';
 
@@ -9,7 +9,7 @@ type InputPasswordProps = FormItemProps & FormKeyEvents & FormMouseEvents & {
     showPassword?: boolean,
     label?: string,
     placeholder?: string,
-    prevention?: Prevention
+    permissions?: Permission[]
 }
 
 const InputPassword = (props: InputPasswordProps) => {
@@ -25,8 +25,9 @@ const InputPassword = (props: InputPasswordProps) => {
             model.push({
                 name: props.name,
                 value: props.value ?? "",
-                rules: props.rules,
-                isValid: (props.rules ? props.isValid : true)
+                validations: props.validations,
+                permissions: props.permissions,
+                isValid: (props.validations ? props.isValid : true)
             });
 
             return [...model];
@@ -61,7 +62,7 @@ const InputPassword = (props: InputPasswordProps) => {
                 value={item?.value}
                 placeholder={props.placeholder}
                 onChange={(e) => { handleChange(e.target.value) }}
-                onKeyPress={(e) => { preventKey(e, props.prevention); if (props.onKeyPress) { props.onKeyPress(e); } }}
+                onKeyPress={(e) => { permitKey(e, item); if (props.onKeyPress) { props.onKeyPress(e); } }}
                 onKeyDown={props.onKeyDown}
                 onKeyUp={props.onKeyUp}
                 onFocus={props.onFocus}
@@ -75,7 +76,7 @@ const InputPassword = (props: InputPasswordProps) => {
                 {...(props.isDisabled ? { disabled: true } : {})}
             />
             {props.children}
-            <ErrorMessage rules={item?.rules} />
+            <ErrorMessage rules={item?.validations} />
         </div>
     )
 }

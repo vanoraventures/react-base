@@ -18,13 +18,13 @@ const FileUpload = (props: FileUploadProps) => {
         if (context.model.some(x => x.name === props.name)) {
             throw new Error("Development error ---> Each form element must have unique name!");
         }
-        
+
         context.setModel(model => {
             model.push({
                 name: props.name,
                 value: props.value ?? "",
-                rules: props.rules,
-                isValid: (props.rules ? props.isValid : true),
+                validations: props.validations,
+                isValid: (props.validations ? props.isValid : true),
                 data: ""
             });
 
@@ -84,7 +84,7 @@ const FileUpload = (props: FileUploadProps) => {
                 {...(props.allowedTypes ? { accept: props.allowedTypes } : {})}
             />
             {props.children}
-            <ErrorMessage rules={item?.rules} />
+            <ErrorMessage rules={item?.validations} />
         </div>
     )
 }

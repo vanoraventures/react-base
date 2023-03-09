@@ -24,8 +24,8 @@ const Radio = (props: RadioProps) => {
             model.push({
                 name: props.name,
                 value: props.value ?? "",
-                rules: props.rules,
-                isValid: (props.rules ? props.isValid : true)
+                validations: props.validations,
+                isValid: (props.validations ? props.isValid : true)
             });
 
             return [...model];
@@ -74,7 +74,7 @@ const Radio = (props: RadioProps) => {
                 </div>
             ))}
             {props.children}
-            <ErrorMessage rules={item?.rules} />
+            <ErrorMessage rules={item?.validations} />
         </div>
     )
 }

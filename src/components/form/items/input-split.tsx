@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { FormContext, FormItemProps, FormKeyEvents, FormMouseEvents } from '..';
-import { Prevention, preventKey } from '../models/preventions';
+import { permitKey, Permission } from '../models/permissions';
 import { validateFormItem } from '../models/validations';
 import ErrorMessage from './errorMessage';
 
@@ -8,7 +8,7 @@ type InputSplitProps = FormItemProps & FormKeyEvents & FormMouseEvents & {
     charCount: number,
     isDisabled?: boolean,
     label?: string,
-    prevention?: Prevention
+    permissions?: Permission[]
 }
 
 const InputSplit = (props: InputSplitProps) => {
@@ -25,8 +25,9 @@ const InputSplit = (props: InputSplitProps) => {
             model.push({
                 name: props.name,
                 value: props.value ?? "",
-                rules: props.rules,
-                isValid: (props.rules ? props.isValid : true)
+                validations: props.validations,
+                permissions: props.permissions,
+                isValid: (props.validations ? props.isValid : true)
             });
 
             return [...model];
@@ -102,7 +103,7 @@ const InputSplit = (props: InputSplitProps) => {
             type="text"
             value={item?.value.substr(i, 1)}
             onChange={(e) => handleChange(e.target.value, i)} key={"input-split-" + i}
-            onKeyPress={(e) => { preventKey(e, props.prevention); if (props.onKeyPress) { props.onKeyPress(e); } }}
+            onKeyPress={(e) => { permitKey(e, item); if (props.onKeyPress) { props.onKeyPress(e); } }}
             onKeyDown={(e) => { onKeyDown(e, i); if (props.onKeyDown) { props.onKeyDown(e); } }}
             onKeyUp={props.onKeyUp}
             onFocus={props.onFocus}
@@ -126,7 +127,7 @@ const InputSplit = (props: InputSplitProps) => {
                 {items}
             </div>
             {props.children}
-            <ErrorMessage rules={item?.rules} />
+            <ErrorMessage rules={item?.validations} />
         </div>
     )
 }
