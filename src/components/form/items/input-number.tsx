@@ -26,7 +26,7 @@ const InputNumber = (props: InputNumberProps) => {
         if (context.model.some(x => x.name === props.name)) {
             throw new Error("Development error ---> Each form element must have unique name!");
         }
-        
+
         context.setModel(model => {
             model.push({
                 name: props.name,
@@ -63,7 +63,7 @@ const InputNumber = (props: InputNumberProps) => {
             }
             <NumberFormat
                 name={props.name}
-                value={item?.value}
+                value={item?.value ?? ""}
                 thousandSeparator={props.customization?.thousandSeparator}
                 decimalSeparator={props.customization?.decimalSeparator}
                 decimalScale={props.customization?.decimalScale}

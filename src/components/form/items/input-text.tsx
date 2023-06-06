@@ -62,7 +62,7 @@ const InputText = (props: InputTextProps) => {
                     type="text"
                     name={props.name}
                     placeholder={props.placeholder}
-                    value={item?.value}
+                    value={item?.value ?? ""}
                     mask={props.mask}
                     onChange={(e) => { handleChange(e.target.value) }}
                     onKeyPress={(e) => { permitKey(e, item); if (props.onKeyPress) { props.onKeyPress(e); } }}
@@ -83,7 +83,7 @@ const InputText = (props: InputTextProps) => {
                     type="text"
                     name={props.name}
                     placeholder={props.placeholder}
-                    value={item?.value}
+                    value={item?.value ?? ""}
                     onChange={(e) => { handleChange(e.target.value) }}
                     onKeyPress={(e) => { permitKey(e, item); if (props.onKeyPress) { props.onKeyPress(e); } }}
                     onKeyDown={props.onKeyDown}

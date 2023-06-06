@@ -39,7 +39,7 @@ const Accordion = (props: Props & { closeOthersOnOpen?: boolean }) => {
     const [items, setItems] = useState<React.Dispatch<React.SetStateAction<boolean>>[]>([]);
 
     return (
-        <AccordionContext.Provider value={{ closeOthersOnOpen: props.closeOthersOnOpen??false, items, setItems }}>
+        <AccordionContext.Provider value={{ closeOthersOnOpen: props.closeOthersOnOpen ?? false, items, setItems }}>
             <div
                 className={"accordion" + (props.classNames ? " " + props.classNames : "")}
                 onClick={props.onClick}
@@ -133,22 +133,16 @@ export const AccordionHeader = (props: Props) => {
 /**
  * AccordionBody can have any children
  */
-export const AccordionBody = (props: Props) => {
-    const context = useContext(AccordionItemContext);
-
-    return context.isActive ?
-        <div
-            className={"accordion-body" + (props.classNames ? " " + props.classNames : "")}
-            onClick={props.onClick}
-            onMouseDown={props.onMouseDown}
-            onMouseUp={props.onMouseUp}
-            onMouseMove={props.onMouseMove}
-            onMouseEnter={props.onMouseEnter}
-            onMouseLeave={props.onMouseLeave}>
-            {props.children}
-        </div>
-        :
-        <></>
-};
+export const AccordionBody = (props: Props) =>
+    <div
+        className={"accordion-body" + (props.classNames ? " " + props.classNames : "")}
+        onClick={props.onClick}
+        onMouseDown={props.onMouseDown}
+        onMouseUp={props.onMouseUp}
+        onMouseMove={props.onMouseMove}
+        onMouseEnter={props.onMouseEnter}
+        onMouseLeave={props.onMouseLeave}>
+        {props.children}
+    </div>;
 
 export default Accordion;

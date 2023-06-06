@@ -101,7 +101,7 @@ const InputSplit = (props: InputSplitProps) => {
             ref={e => { if (e) { inputs.current[i] = e } }}
             maxLength={1}
             type="text"
-            value={item?.value.substr(i, 1)}
+            value={item?.value.substr(i, 1) ?? ""}
             onChange={(e) => handleChange(e.target.value, i)} key={"input-split-" + i}
             onKeyPress={(e) => { permitKey(e, item); if (props.onKeyPress) { props.onKeyPress(e); } }}
             onKeyDown={(e) => { onKeyDown(e, i); if (props.onKeyDown) { props.onKeyDown(e); } }}

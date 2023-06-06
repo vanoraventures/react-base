@@ -8,9 +8,7 @@ type MainProps = {
 }
 
 type NoyirmibirStore = {
-    loading: {
-        count: number
-    },
+    loading: number,
     scroll: {
         lastScrollPosition: number,
         lockedScrollCount: number
@@ -20,15 +18,14 @@ type NoyirmibirStore = {
         height?: number,
         isMobile: boolean
     },
-    setLoading: (loading: { count: number }) => void,
+    increaseLoading: () => void,
+    decreaseLoading: () => void,
     setScroll: (scroll: { lastScrollPosition: number, lockedScrollCount: number }) => void,
     setSize: (loading: { width?: number, height?: number, isMobile: boolean }) => void
 }
 
 export const useNoyirmibirStore = create<NoyirmibirStore>(set => ({
-    loading: {
-        count: 0
-    },
+    loading: 0,
     scroll: {
         lastScrollPosition: 0,
         lockedScrollCount: 0
@@ -38,7 +35,8 @@ export const useNoyirmibirStore = create<NoyirmibirStore>(set => ({
         height: window.innerHeight,
         isMobile: document.documentElement.clientWidth <= 900
     },
-    setLoading: (loading: { count: number }) => set({ loading }),
+    increaseLoading: () => set((state) => { return { ...state, loading: state.loading + 1 } }),
+    decreaseLoading: () => set((state) => { return { ...state, loading: state.loading - 1 } }),
     setScroll: (scroll: { lastScrollPosition: number, lockedScrollCount: number }) => set({ scroll }),
     setSize: (size: { width?: number, height?: number, isMobile: boolean }) => set({ size })
 }));
@@ -74,7 +72,7 @@ const Noyirmibir = (props: MainProps) => {
 };
 
 const Loading = (props: { wrapper?: JSX.Element }) => {
-    const count = useNoyirmibirStore(state => state.loading.count);
+    const count = useNoyirmibirStore(state => state.loading);
 
     if (count > 0) {
         if (props.wrapper) {

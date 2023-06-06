@@ -19,7 +19,7 @@ const Textarea = (props: TextareaProps) => {
         if (context.model.some(x => x.name === props.name)) {
             throw new Error("Development error ---> Each form element must have unique name!");
         }
-        
+
         context.setModel(model => {
             model.push({
                 name: props.name,
@@ -57,7 +57,7 @@ const Textarea = (props: TextareaProps) => {
             }
             <textarea
                 name={props.name}
-                value={item?.value}
+                value={item?.value ?? ""}
                 placeholder={props.placeholder}
                 onChange={(e) => { handleChange(e.target.value) }}
                 onKeyPress={(e) => { permitKey(e, item); if (props.onKeyPress) { props.onKeyPress(e); } }}

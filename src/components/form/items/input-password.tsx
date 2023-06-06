@@ -59,7 +59,7 @@ const InputPassword = (props: InputPasswordProps) => {
             <input
                 type={props.showPassword ? "text" : "password"}
                 name={props.name}
-                value={item?.value}
+                value={item?.value ?? ""}
                 placeholder={props.placeholder}
                 onChange={(e) => { handleChange(e.target.value) }}
                 onKeyPress={(e) => { permitKey(e, item); if (props.onKeyPress) { props.onKeyPress(e); } }}
